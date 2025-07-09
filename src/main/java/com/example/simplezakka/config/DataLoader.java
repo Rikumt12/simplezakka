@@ -37,7 +37,8 @@ public class DataLoader implements CommandLineRunner {
                 3500, 
                 20, 
                 "/images/desk-organizer.png", 
-                true
+                true,
+                "デスク周辺"
             ),
             createProduct(
                 "アロマディフューザー（ウッド）", 
@@ -45,7 +46,8 @@ public class DataLoader implements CommandLineRunner {
                 4200, 
                 15, 
                 "/images/aroma-diffuser.png", 
-                true
+                true,
+                "リビングインテリア"
             ),
             createProduct(
                 "コットンブランケット", 
@@ -53,7 +55,8 @@ public class DataLoader implements CommandLineRunner {
                 5800, 
                 10, 
                 "/images/cotton-blanket.png", 
-                false
+                false,
+                "リビングインテリア"
             ),
             createProduct(
                 "ステンレスタンブラー", 
@@ -61,7 +64,8 @@ public class DataLoader implements CommandLineRunner {
                 2800, 
                 30, 
                 "/images/tumbler.png", 
-                false
+                false,
+                "キッチン"
             ),
             createProduct(
                 "ミニマルウォールクロック", 
@@ -69,7 +73,8 @@ public class DataLoader implements CommandLineRunner {
                 3200, 
                 25, 
                 "/images/wall-clock.png", 
-                false
+                false,
+                "リビングインテリア"
             ),
             createProduct(
                 "リネンクッションカバー", 
@@ -77,7 +82,8 @@ public class DataLoader implements CommandLineRunner {
                 2500, 
                 40, 
                 "/images/cushion-cover.png", 
-                true
+                true,
+                "リビングインテリア"
             ),
             createProduct(
                 "陶器フラワーベース", 
@@ -85,7 +91,8 @@ public class DataLoader implements CommandLineRunner {
                 4000, 
                 15, 
                 "/images/flower-vase.png", 
-                false
+                false,
+                "リビングインテリア"
             ),
             createProduct(
                 "木製コースター（4枚セット）", 
@@ -93,7 +100,8 @@ public class DataLoader implements CommandLineRunner {
                 1800, 
                 50, 
                 "/images/wooden-coaster.png", 
-                false
+                false,
+                "キッチン"
             ),
             createProduct(
                 "キャンバストートバッグ", 
@@ -101,7 +109,8 @@ public class DataLoader implements CommandLineRunner {
                 3600, 
                 35, 
                 "/images/tote-bag.png", 
-                true
+                true,
+                "おでかけ"
             ),
              createProduct(
                 "ソープディスペンサー", 
@@ -109,7 +118,8 @@ public class DataLoader implements CommandLineRunner {
                 1800, 
                 35, 
                 "/images/tote-bag.png", 
-                true
+                true,
+                "バス・トイレ用品"
             ),
       
              createProduct(
@@ -126,7 +136,8 @@ public class DataLoader implements CommandLineRunner {
                 500, 
                 35, 
                 "/images/tote-bag.png", 
-                true
+                true,
+                "デスク周辺"
             ),
              createProduct(
                 "ペン立て", 
@@ -134,7 +145,8 @@ public class DataLoader implements CommandLineRunner {
                 2500, 
                 35, 
                 "/images/tote-bag.png", 
-                true
+                true,
+                "デスク周辺"
             ),
              createProduct(
                 "カレンダー", 
@@ -142,7 +154,8 @@ public class DataLoader implements CommandLineRunner {
                 900, 
                 35, 
                 "/images/tote-bag.png", 
-                true
+                true,
+                "デスク周辺"
             ),
              createProduct(
                 "水筒", 
@@ -158,7 +171,8 @@ public class DataLoader implements CommandLineRunner {
                 3200, 
                 35, 
                 "/images/tote-bag.png", 
-                true
+                true,
+                "おでかけ"
             ),
             createProduct(
                 "ガラス保存容器セット", 
@@ -166,20 +180,22 @@ public class DataLoader implements CommandLineRunner {
                 1300, 
                 20, 
                 "/images/glass-container.png", 
-                false
+                false,
+                "キッチン"
             )
         );
         
         productRepository.saveAll(products);
     }
     
-    private Product createProduct(String name, String description, Integer price, Integer stock, String imageUrl, Boolean isRecommended) {
+    private Product createProduct(String name, String description, Integer price, Integer stock, String imageUrl, Boolean isRecommended,String category) {
         Product product = new Product();
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
         product.setStock(stock);
         product.setImageUrl(imageUrl);
+        product.setCategory(category);
         product.setIsRecommended(isRecommended);
         product.setCreatedAt(LocalDateTime.now());
         product.setUpdatedAt(LocalDateTime.now());
