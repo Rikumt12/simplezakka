@@ -128,7 +128,8 @@ public class DataLoader implements CommandLineRunner {
                 1500, 
                 35, 
                 "/mergedProfilePicturev2.jpg", 
-                true
+                true,
+                "バス・トイレ用品"
             ),
              createProduct(
                 "ノート", 
@@ -163,7 +164,8 @@ public class DataLoader implements CommandLineRunner {
                 2300, 
                 35, 
                 "/images/tote-bag.png", 
-                true
+                true,
+                "おでかけ"
             ),
              createProduct(
                 "折りたたみ傘", 
