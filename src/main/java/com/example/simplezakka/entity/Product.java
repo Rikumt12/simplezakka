@@ -47,6 +47,4 @@ public class Product {
         updatedAt = LocalDateTime.now();
     }
 
-    @Column(nullable = false)
-    private String category;
 }
