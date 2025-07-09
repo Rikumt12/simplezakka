@@ -117,7 +117,7 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 1500, 
                 35, 
-                "/mergedProfilePicturev2.jpg", 
+                "/images/mergedProfilePicturev2.jpg", 
                 true
             ),
              createProduct(
@@ -149,7 +149,7 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 2300, 
                 35, 
-                "/images/tote-bag.png", 
+                "/images/suitou.png", 
                 true
             ),
              createProduct(
