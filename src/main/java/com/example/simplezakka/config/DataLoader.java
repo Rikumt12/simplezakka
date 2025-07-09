@@ -103,10 +103,67 @@ public class DataLoader implements CommandLineRunner {
                 "/images/tote-bag.png", 
                 true
             ),
+             createProduct(
+                "ソープディスペンサー", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                1800, 
+                35, 
+                "/images/tote-bag.png", 
+                true
+            ),
+      
+             createProduct(
+                "珪藻土バスマット", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                1500, 
+                35, 
+                "/mergedProfilePicturev2.jpg", 
+                true
+            ),
+             createProduct(
+                "ノート", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                500, 
+                35, 
+                "/images/tote-bag.png", 
+                true
+            ),
+             createProduct(
+                "ペン立て", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                2500, 
+                35, 
+                "/images/tote-bag.png", 
+                true
+            ),
+             createProduct(
+                "カレンダー", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                900, 
+                35, 
+                "/images/tote-bag.png", 
+                true
+            ),
+             createProduct(
+                "水筒", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                2300, 
+                35, 
+                "/images/tote-bag.png", 
+                true
+            ),
+             createProduct(
+                "折りたたみ傘", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                3200, 
+                35, 
+                "/images/tote-bag.png", 
+                true
+            ),
             createProduct(
                 "ガラス保存容器セット", 
                 "電子レンジ・食洗機対応のガラス製保存容器。3サイズセット。", 
-                4500, 
+                1300, 
                 20, 
                 "/images/glass-container.png", 
                 false
