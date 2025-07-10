@@ -48,7 +48,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
 
      */
 
-    Optional<Admin> findByUsernameAndIsActive(String username, Boolean isActive);
+    Optional<Admin> findByUsernameAndActive(String username, Boolean Active);
 
 }
  
