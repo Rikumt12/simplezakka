@@ -117,7 +117,6 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 1800, 
                 35, 
-
                 "/images/sopedispenser.png", 
                 true
 
@@ -128,7 +127,6 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 1500, 
                 35, 
-
                 "/images/keisoudo.png", 
                 true
 
@@ -138,7 +136,6 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 500, 
                 35, 
-
                 "/images/note.png", 
                 true
 
@@ -148,8 +145,7 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 2500, 
                 35, 
-
-                "/images/penntate.png", 
+                 "/images/penntate.png", 
                 true
 
             ),
@@ -158,7 +154,6 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 900, 
                 35, 
-
                 "/images/karennda-.png", 
                 true
 
@@ -168,7 +163,6 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 2300, 
                 35, 
-
                 "/images/suitou.png", 
                 true
 
@@ -178,8 +172,7 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 3200, 
                 35, 
-
-                "/images/kasa.jpg", 
+                 "/images/kasa.jpg", 
                 true
 
             ),
