@@ -13,6 +13,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:5500"}) // CORS設定追加
 public class AdminController {
     
     @Autowired
@@ -40,20 +41,36 @@ public class AdminController {
             String username = loginData.get("username");
             String password = loginData.get("password");
             
-            if (username == null || password == null) {
-                return ResponseEntity.badRequest().body(Map.of("error", "ユーザー名とパスワードを入力してください"));
+            // 入力値検証
+            if (username == null || username.trim().isEmpty() || 
+                password == null || password.trim().isEmpty()) {
+                return ResponseEntity.ok(Map.of(
+                    "success", false,
+                    "error", "管理者IDとパスワードを入力してください"
+                ));
             }
             
-            Admin admin = adminService.authenticate(username, password);
+            // 認証処理
+            Admin admin = adminService.authenticate(username.trim(), password);
             if (admin != null) {
                 // セッションに管理者情報を保存
                 session.setAttribute("admin", admin);
-                return ResponseEntity.ok(Map.of("success", true, "message", "ログインしました"));
+                return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "ログインしました"
+                ));
             } else {
-                return ResponseEntity.badRequest().body(Map.of("error", "ユーザー名またはパスワードが間違っています"));
+                return ResponseEntity.ok(Map.of(
+                    "success", false,
+                    "error", "管理者IDまたはパスワードが間違っています"
+                ));
             }
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(Map.of("error", "ログインに失敗しました"));
+            e.printStackTrace(); // ログ出力
+            return ResponseEntity.ok(Map.of(
+                "success", false,
+                "error", "ログイン処理中にエラーが発生しました"
+            ));
         }
     }
     
@@ -80,19 +97,48 @@ public class AdminController {
     }
     
     /**
+     * ログアウト処理API
+     */
+    @PostMapping("/api/logout")
+    @ResponseBody
+    public ResponseEntity<?> logoutApi(HttpSession session) {
+        try {
+            session.invalidate();
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "ログアウトしました"
+            ));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.ok(Map.of(
+                "success", false,
+                "error", "ログアウト処理中にエラーが発生しました"
+            ));
+        }
+    }
+    
+    /**
      * 現在のログイン状態確認API
      */
     @GetMapping("/api/status")
     @ResponseBody
     public ResponseEntity<?> getLoginStatus(HttpSession session) {
-        Admin admin = (Admin) session.getAttribute("admin");
-        if (admin != null) {
-            return ResponseEntity.ok(Map.of("loggedIn", true, "admin", Map.of(
-                "username", admin.getUsername(),
-                "name", admin.getName(),
-                "email", admin.getEmail()
-            )));
-        } else {
+        try {
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin != null) {
+                return ResponseEntity.ok(Map.of(
+                    "loggedIn", true,
+                    "admin", Map.of(
+                        "username", admin.getUsername(),
+                        "name", admin.getName() != null ? admin.getName() : "",
+                        "email", admin.getEmail() != null ? admin.getEmail() : ""
+                    )
+                ));
+            } else {
+                return ResponseEntity.ok(Map.of("loggedIn", false));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.ok(Map.of("loggedIn", false));
         }
     }
