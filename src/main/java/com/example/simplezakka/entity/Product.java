@@ -33,7 +33,7 @@ public class Product {
     private Boolean isRecommended;
 
     @Column(length = 255)
-    private String category; // ←★追加したフィールド
+    private String category; 
 
     private LocalDateTime createdAt;
     
