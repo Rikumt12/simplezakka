@@ -108,7 +108,7 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 1800, 
                 35, 
-                "/images/tote-bag.png", 
+                "/images/sopedispenser.png", 
                 true
             ),
       
@@ -117,47 +117,47 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 1500, 
                 35, 
-                "/mergedProfilePicturev2.jpg", 
+                "/images/keisoudo.png", 
                 true
             ),
              createProduct(
-                "ノート", 
+                "ベーシックノート", 
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 500, 
                 35, 
-                "/images/tote-bag.png", 
+                "/images/note.png", 
                 true
             ),
-             createProduct(
-                "ペン立て", 
+            createProduct(
+                "ペン立て(木製)", 
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 2500, 
                 35, 
-                "/images/tote-bag.png", 
+                "/images/penntate.png", 
                 true
             ),
              createProduct(
-                "カレンダー", 
+                "カレンダー（2025）", 
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 900, 
                 35, 
-                "/images/tote-bag.png", 
+                "/images/karennda-.png", 
                 true
             ),
              createProduct(
-                "水筒", 
+                "ウォーターボトル", 
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 2300, 
                 35, 
-                "/images/tote-bag.png", 
+                "/images/suitou.png", 
                 true
             ),
              createProduct(
-                "折りたたみ傘", 
+                "折りたたみかさ", 
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 3200, 
                 35, 
-                "/images/tote-bag.png", 
+                "/images/kasa.jpg", 
                 true
             ),
             createProduct(
