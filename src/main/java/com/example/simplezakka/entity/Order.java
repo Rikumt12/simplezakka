@@ -57,7 +57,7 @@ public class Order {
         updatedAt = LocalDateTime.now();
     }
     
-    // Helper method to add order detail
+
     public void addOrderDetail(OrderDetail orderDetail) {
         orderDetails.add(orderDetail);
         orderDetail.setOrder(this);

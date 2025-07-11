@@ -18,21 +18,14 @@ public class Administrator implements CommandLineRunner {
     
     @Override
     public void run(String... args) throws Exception {
-        // 初期管理者アカウントの作成
         try {
             adminService.createAdmin("admin", "admin123", "admin@example.com", "管理者");
             System.out.println("初期管理者アカウントを作成しました:");
             System.out.println("ユーザー名: admin");
             System.out.println("パスワード: admin123");
         } catch (IllegalArgumentException e) {
-            // 既に存在する場合は何もしない
             System.out.println("管理者アカウントは既に存在します");
         }
-        
-        // 既存のサンプルデータロード処理があればここに残す
-        // 例：
-        // if (productRepository.count() == 0) {
-        //     // サンプル商品データの作成
-        // }
+       
     }
 }

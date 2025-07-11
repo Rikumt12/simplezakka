@@ -1,53 +1,58 @@
 package com.example.simplezakka.controller;
 
+import com.example.simplezakka.dto.product.ProductListItem;
 import com.example.simplezakka.entity.Admin;
 import com.example.simplezakka.service.AdminService;
+import com.example.simplezakka.service.ProductService;
+
 import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
-@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:5500"}) // CORS設定追加
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:5500"})
 public class AdminController {
-    
+
     @Autowired
     private AdminService adminService;
-    
+
+
+    @Autowired
+    private ProductService productService;
+
     @GetMapping("/login")
     public String showLogin(HttpSession session, Model model) {
-        // 既にログイン済みの場合はダッシュボードにリダイレクト
         if (session.getAttribute("admin") != null) {
             return "redirect:/admin/dashboard";
         }
         return "admin/login";
     }
-    
+
     @PostMapping("/api/login")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginData, HttpSession session) {
         try {
             String username = loginData.get("username");
             String password = loginData.get("password");
-            
-            // 入力値検証
-            if (username == null || username.trim().isEmpty() || 
+
+            if (username == null || username.trim().isEmpty() ||
                 password == null || password.trim().isEmpty()) {
                 return ResponseEntity.ok(Map.of(
                     "success", false,
                     "error", "管理者IDとパスワードを入力してください"
                 ));
             }
-            
-            // 認証処理
+
             Admin admin = adminService.authenticate(username.trim(), password);
             if (admin != null) {
-                // セッションに管理者情報を保存
                 session.setAttribute("admin", admin);
                 return ResponseEntity.ok(Map.of(
                     "success", true,
@@ -60,30 +65,40 @@ public class AdminController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace(); // ログ出力
+            e.printStackTrace();
             return ResponseEntity.ok(Map.of(
                 "success", false,
                 "error", "ログイン処理中にエラーが発生しました"
             ));
         }
     }
-    
+
     @GetMapping("/dashboard")
     public String showDashboard(HttpSession session, Model model) {
         Admin admin = (Admin) session.getAttribute("admin");
         if (admin == null) {
             return "redirect:/admin/login";
         }
+
+       
         model.addAttribute("admin", admin);
+
+        
+        List<ProductListItem> products = productService.findAllProducts();
+        System.out.println("管理画面の商品件数: " + products.size());
+        products.forEach(p -> System.out.println(p.getProductId() + " : " + p.getName()));
+        model.addAttribute("products", products);
+
+        
         return "admin/dashboard";
     }
-   
+
     @PostMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/admin/login";
     }
-    
+
     @PostMapping("/api/logout")
     @ResponseBody
     public ResponseEntity<?> logoutApi(HttpSession session) {
@@ -101,7 +116,7 @@ public class AdminController {
             ));
         }
     }
-   
+
     @GetMapping("/api/status")
     @ResponseBody
     public ResponseEntity<?> getLoginStatus(HttpSession session) {

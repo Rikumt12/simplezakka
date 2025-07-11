@@ -1,0 +1,84 @@
+<!-- src/main/resources/templates/admin/dashboard.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品一覧（管理画面）</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        img {
+            max-width: 80px;
+            height: auto;
+        }
+        .actions button,
+        .actions a {
+            padding: 6px 12px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 0 4px;
+        }
+        .actions button:hover,
+        .actions a:hover {
+            background-color: #0056b3;
+        }
+        form {
+            display: inline-block;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>商品一覧（管理画面）</h1>
+
+    <table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>画像</th>
+            <th>名前</th>
+            <th>価格</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.productId}">1</td>
+            <td><img th:src="@{${product.imageUrl}}" alt="画像"></td>
+            <td th:text="${product.name}">商品名</td>
+            <td th:text="'¥' + ${product.price}">1000</td>
+            <td class="actions">
+                <a href="#" onclick="return showNotImplementedAlert();">編集</a>
+                <form onsubmit="return showNotImplementedAlert();" style="display:inline;">
+                    <button type="submit">削除</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function showNotImplementedAlert() {
+    alert("まだ実装できていません");
+    return false; 
+}
+</script>
+
+</body>
+</html>

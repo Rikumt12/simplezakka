@@ -18,6 +18,7 @@ public class AdminService {
     
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
+ 
     @PostConstruct
     public void initializeDefaultAdmin() {
         String defaultUsername = "admin";
@@ -53,13 +54,7 @@ public class AdminService {
         }
     }
 
-    /**
-     * 管理者を新規作成
-     * @param username ユーザー名
-     * @param password パスワード
-     * @param name 氏名
-     * @param email メールアドレス
-     */
+  
     public void createAdmin(String username, String password, String name, String email) {
         if (adminRepository.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("すでに存在するユーザー名です: " + username);
@@ -78,6 +73,7 @@ public class AdminService {
         adminRepository.save(admin);
     }
 
+ 
     public Admin authenticate(String username, String password) {
         try {
             Optional<Admin> adminOpt = adminRepository.findByUsername(username);
@@ -106,6 +102,7 @@ public class AdminService {
         }
     }
 
+ 
     public Admin findByUsername(String username) {
         return adminRepository.findByUsername(username).orElse(null);
     }

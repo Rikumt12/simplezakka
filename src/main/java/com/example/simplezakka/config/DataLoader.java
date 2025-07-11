@@ -27,7 +27,7 @@ public class DataLoader implements CommandLineRunner {
 
     private void loadSampleProducts() {
         if (productRepository.count() > 0) {
-            return; // すでにデータが存在する場合はスキップ
+            return; 
         }
 
         List<Product> products = Arrays.asList(
