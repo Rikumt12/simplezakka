@@ -1,28 +1,34 @@
 package com.example.simplezakka.controller;
 
+import com.example.simplezakka.dto.product.ProductListItem;
 import com.example.simplezakka.entity.Admin;
 import com.example.simplezakka.service.AdminService;
+import com.example.simplezakka.service.ProductService;
+
 import jakarta.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
-@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:5500"}) 
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:5500"})
 public class AdminController {
-    
+
     @Autowired
     private AdminService adminService;
-    
-  
+
+    @Autowired
+    private ProductService productService;
+
     @GetMapping("/login")
     public String showLogin(HttpSession session, Model model) {
-        // 既にログイン済みの場合はダッシュボードにリダイレクト
         if (session.getAttribute("admin") != null) {
             return "redirect:/admin/dashboard";
         }
@@ -36,7 +42,7 @@ public class AdminController {
             String username = loginData.get("username");
             String password = loginData.get("password");
 
-            if (username == null || username.trim().isEmpty() || 
+            if (username == null || username.trim().isEmpty() ||
                 password == null || password.trim().isEmpty()) {
                 return ResponseEntity.ok(Map.of(
                     "success", false,
@@ -46,7 +52,6 @@ public class AdminController {
 
             Admin admin = adminService.authenticate(username.trim(), password);
             if (admin != null) {
-
                 session.setAttribute("admin", admin);
                 return ResponseEntity.ok(Map.of(
                     "success", true,
@@ -59,7 +64,7 @@ public class AdminController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
             return ResponseEntity.ok(Map.of(
                 "success", false,
                 "error", "ログイン処理中にエラーが発生しました"
@@ -73,7 +78,17 @@ public class AdminController {
         if (admin == null) {
             return "redirect:/admin/login";
         }
+
+        // 管理者情報をモデルにセット
         model.addAttribute("admin", admin);
+
+        // 商品一覧を取得してモデルにセット
+        List<ProductListItem> products = productService.findAllProducts();
+        System.out.println("管理画面の商品件数: " + products.size());
+        products.forEach(p -> System.out.println(p.getProductId() + " : " + p.getName()));
+        model.addAttribute("products", products);
+
+        // admin/dashboard.html に管理者情報も商品一覧も渡して表示
         return "admin/dashboard";
     }
 
@@ -82,7 +97,6 @@ public class AdminController {
         session.invalidate();
         return "redirect:/admin/login";
     }
-    
 
     @PostMapping("/api/logout")
     @ResponseBody
