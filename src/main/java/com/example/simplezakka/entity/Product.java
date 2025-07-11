@@ -31,10 +31,7 @@ public class Product {
     private String imageUrl;
     
     private Boolean isRecommended;
-
-    @Column(length = 255)
-    private String category; 
-
+    
     private LocalDateTime createdAt;
     
     private LocalDateTime updatedAt;
@@ -49,4 +46,6 @@ public class Product {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+
 }
