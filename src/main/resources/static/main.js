@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // APIのベースURL
     const API_BASE = '/api';
+
+    // 全ての商品データを保持する変数（検索機能のために追加）
+    let allProducts = []; 
     
     // 商品一覧の取得と表示
     fetchProducts();
@@ -31,6 +34,20 @@ document.addEventListener('DOMContentLoaded', function() {
         submitOrder();
     });
     
+    // --- 検索機能関連の追加 ---
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+
+    searchBtn.addEventListener('click', () => {
+        filterAndDisplayProducts(searchInput.value);
+    });
+
+    searchInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            filterAndDisplayProducts(searchInput.value);
+        }
+    });
+
     // 商品一覧を取得して表示する関数
     async function fetchProducts() {
         try {
@@ -39,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error('商品の取得に失敗しました');
             }
             const products = await response.json();
+            allProducts = products; // 取得した全商品を保存
             displayProducts(products);
         } catch (error) {
             console.error('Error:', error);
@@ -47,11 +65,16 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // 商品一覧を表示する関数
-    function displayProducts(products) {
+    function displayProducts(productsToDisplay) { // 引数名を変更
         const container = document.getElementById('products-container');
         container.innerHTML = '';
         
-        products.forEach(product => {
+        if (productsToDisplay.length === 0) {
+            container.innerHTML = '<p class="text-center">該当する商品が見つかりませんでした。</p>';
+            return;
+        }
+
+        productsToDisplay.forEach(product => {
             const card = document.createElement('div');
             card.className = 'col';
             card.innerHTML = `
@@ -71,6 +94,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 fetchProductDetail(product.productId);
             });
         });
+    }
+
+    // 商品をフィルタリングして表示する関数（検索機能のために追加）
+    function filterAndDisplayProducts(searchTerm) {
+        const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
+        let filteredProducts = [];
+
+        if (lowerCaseSearchTerm === '') {
+            filteredProducts = allProducts; // 検索語がない場合は全商品を表示
+        } else {
+            // 商品名または説明にキーワードが含まれる商品をフィルタリング
+            filteredProducts = allProducts.filter(product => 
+                product.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+                (product.description && product.description.toLowerCase().includes(lowerCaseSearchTerm))
+            );
+        }
+        displayProducts(filteredProducts);
     }
     
     // 商品詳細を取得する関数
@@ -209,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>¥${item.price.toLocaleString()}</td>
                         <td>
                             <input type="number" class="form-control form-control-sm update-quantity" 
-                                   data-id="${item.id}" value="${item.quantity}" min="1" style="width: 70px">
+                                        data-id="${item.id}" value="${item.quantity}" min="1" style="width: 70px">
                         </td>
                         <td>¥${item.subtotal.toLocaleString()}</td>
                         <td>

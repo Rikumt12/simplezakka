@@ -107,7 +107,6 @@ public class AdminService {
         return adminRepository.findByUsername(username).orElse(null);
     }
 
-
     public Admin save(Admin admin) {
         admin.setUpdatedAt(LocalDateTime.now());
         return adminRepository.save(admin);
