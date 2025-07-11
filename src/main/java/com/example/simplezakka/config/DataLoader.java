@@ -101,7 +101,87 @@ public class DataLoader implements CommandLineRunner {
                 3600, 
                 35, 
                 "/images/tote-bag.png", 
+<<<<<<< HEAD
                 true
+=======
+<<<<<<< HEAD
+                true
+=======
+                true,
+                "おでかけ"
+            ),
+             createProduct(
+                "ソープディスペンサー", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                1800, 
+                35, 
+                "/images/sopedispenser.png", 
+                true,
+                "おでかけ"
+
+            ),
+      
+             createProduct(
+                "珪藻土バスマット", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                1500, 
+                35, 
+                "/images/keisoudo.png", 
+                true,
+                "キッチン"
+
+            ),
+             createProduct(
+                "ベーシックノート", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                500, 
+                35, 
+                "/images/note.png", 
+                true,
+                "キッチン"
+                
+            ),
+            createProduct(
+                "ペン立て(木製)", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                2500, 
+                35, 
+                 "/images/penntate.png", 
+                true,
+                "キッチン"
+
+            ),
+             createProduct(
+                "カレンダー（2025）", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                900, 
+                35, 
+                "/images/karennda-.png", 
+                true,
+                "キッチン"
+
+            ),
+             createProduct(
+                "ウォーターボトル", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                2300, 
+                35, 
+                "/images/suitou.png", 
+                true,
+                "キッチン"
+
+            ),
+             createProduct(
+                "折りたたみかさ", 
+                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                3200, 
+                35, 
+                 "/images/kasa.jpg", 
+                true,
+                "キッチン"
+
+>>>>>>> 806730162c083747e777fa677e99bf3fcc70bdb5
+>>>>>>> 2bea704940db185930eca8d692ffa81cfdc1a319
             ),
             createProduct(
                 "ガラス保存容器セット", 
