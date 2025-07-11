@@ -48,30 +48,37 @@
     <h1>商品一覧（管理画面）</h1>
 
     <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>画像</th>
-                <th>名前</th>
-                <th>価格</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="product : ${products}">
-                <td th:text="${product.productId}">1</td>
-                <td><img th:src="@{${product.imageUrl}}" alt="画像"></td>
-                <td th:text="${product.name}">商品名</td>
-                <td th:text="'¥' + ${product.price}">1000</td>
-                <td class="actions">
-                    <a th:href="@{'/admin/products/' + ${product.productId} + '/edit'}">編集</a>
-                    <form th:action="@{'/admin/products/' + ${product.productId} + '/delete'}" method="post"
-                          onsubmit="return confirm('本当に削除しますか？');">
-                        <button type="submit">削除</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>画像</th>
+            <th>名前</th>
+            <th>価格</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.productId}">1</td>
+            <td><img th:src="@{${product.imageUrl}}" alt="画像"></td>
+            <td th:text="${product.name}">商品名</td>
+            <td th:text="'¥' + ${product.price}">1000</td>
+            <td class="actions">
+                <a href="#" onclick="return showNotImplementedAlert();">編集</a>
+                <form onsubmit="return showNotImplementedAlert();" style="display:inline;">
+                    <button type="submit">削除</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script>
+function showNotImplementedAlert() {
+    alert("まだ実装できていません");
+    return false; // クリック・submitをキャンセルする
+}
+</script>
+
 </body>
 </html>
