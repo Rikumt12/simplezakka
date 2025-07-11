@@ -37,8 +37,7 @@ public class DataLoader implements CommandLineRunner {
                 3500, 
                 20, 
                 "/images/desk-organizer.png", 
-                true,
-                "デスク周辺"
+                true
             ),
             createProduct(
                 "アロマディフューザー（ウッド）", 
@@ -46,8 +45,7 @@ public class DataLoader implements CommandLineRunner {
                 4200, 
                 15, 
                 "/images/aroma-diffuser.png", 
-                true,
-                "リビングインテリア"
+                true
             ),
             createProduct(
                 "コットンブランケット", 
@@ -55,8 +53,7 @@ public class DataLoader implements CommandLineRunner {
                 5800, 
                 10, 
                 "/images/cotton-blanket.png", 
-                false,
-                "リビングインテリア"
+                false
             ),
             createProduct(
                 "ステンレスタンブラー", 
@@ -64,8 +61,7 @@ public class DataLoader implements CommandLineRunner {
                 2800, 
                 30, 
                 "/images/tumbler.png", 
-                false,
-                "キッチン"
+                false
             ),
             createProduct(
                 "ミニマルウォールクロック", 
@@ -73,8 +69,7 @@ public class DataLoader implements CommandLineRunner {
                 3200, 
                 25, 
                 "/images/wall-clock.png", 
-                false,
-                "リビングインテリア"
+                false
             ),
             createProduct(
                 "リネンクッションカバー", 
@@ -82,8 +77,7 @@ public class DataLoader implements CommandLineRunner {
                 2500, 
                 40, 
                 "/images/cushion-cover.png", 
-                true,
-                "リビングインテリア"
+                true
             ),
             createProduct(
                 "陶器フラワーベース", 
@@ -91,8 +85,7 @@ public class DataLoader implements CommandLineRunner {
                 4000, 
                 15, 
                 "/images/flower-vase.png", 
-                false,
-                "リビングインテリア"
+                false
             ),
             createProduct(
                 "木製コースター（4枚セット）", 
@@ -100,8 +93,7 @@ public class DataLoader implements CommandLineRunner {
                 1800, 
                 50, 
                 "/images/wooden-coaster.png", 
-                false,
-                "キッチン"
+                false
             ),
             createProduct(
                 "キャンバストートバッグ", 
@@ -109,6 +101,12 @@ public class DataLoader implements CommandLineRunner {
                 3600, 
                 35, 
                 "/images/tote-bag.png", 
+<<<<<<< HEAD
+                true
+=======
+<<<<<<< HEAD
+                true
+=======
                 true,
                 "おでかけ"
             ),
@@ -182,29 +180,29 @@ public class DataLoader implements CommandLineRunner {
                 true,
                 "キッチン"
 
+>>>>>>> 806730162c083747e777fa677e99bf3fcc70bdb5
+>>>>>>> 2bea704940db185930eca8d692ffa81cfdc1a319
             ),
             createProduct(
                 "ガラス保存容器セット", 
                 "電子レンジ・食洗機対応のガラス製保存容器。3サイズセット。", 
-                1300, 
+                4500, 
                 20, 
                 "/images/glass-container.png", 
-                false,
-                "キッチン"
+                false
             )
         );
         
         productRepository.saveAll(products);
     }
     
-    private Product createProduct(String name, String description, Integer price, Integer stock, String imageUrl, Boolean isRecommended,String category) {
+    private Product createProduct(String name, String description, Integer price, Integer stock, String imageUrl, Boolean isRecommended) {
         Product product = new Product();
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
         product.setStock(stock);
         product.setImageUrl(imageUrl);
-        product.setCategory(category);
         product.setIsRecommended(isRecommended);
         product.setCreatedAt(LocalDateTime.now());
         product.setUpdatedAt(LocalDateTime.now());
