@@ -69,7 +69,7 @@ public class DataLoader implements CommandLineRunner {
             ),
             createProduct(
                 "ミニマルウォールクロック", 
-                "余計な装飾のないシンプルな壁掛け時計。静音設計。", 
+                "余計な装飾のないシンプルな壁掛け時計。静音設計！", 
                 3200, 
                 25, 
                 "/images/wall-clock.png", 
