@@ -18,9 +18,6 @@ public class AdminService {
     
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
-    /**
-     * アプリケーション起動時に初期管理者アカウントを作成
-     */
     @PostConstruct
     public void initializeDefaultAdmin() {
         String defaultUsername = "admin";
@@ -57,7 +54,7 @@ public class AdminService {
     }
 
     /**
-     * 管理者を新規作成します
+     * 管理者を新規作成
      * @param username ユーザー名
      * @param password パスワード
      * @param name 氏名
@@ -81,9 +78,6 @@ public class AdminService {
         adminRepository.save(admin);
     }
 
-    /**
-     * 管理者認証
-     */
     public Admin authenticate(String username, String password) {
         try {
             Optional<Admin> adminOpt = adminRepository.findByUsername(username);
@@ -112,24 +106,15 @@ public class AdminService {
         }
     }
 
-    /**
-     * 管理者情報取得
-     */
     public Admin findByUsername(String username) {
         return adminRepository.findByUsername(username).orElse(null);
     }
 
-    /**
-     * 管理者情報更新
-     */
     public Admin save(Admin admin) {
         admin.setUpdatedAt(LocalDateTime.now());
         return adminRepository.save(admin);
     }
 
-    /**
-     * パスワード変更
-     */
     public Admin changePassword(Admin admin, String newPassword) {
         admin.setPassword(passwordEncoder.encode(newPassword));
         admin.setUpdatedAt(LocalDateTime.now());

@@ -13,7 +13,7 @@ public class EmailService {
     private JavaMailSender mailSender;
 
     @Autowired
-    private Environment env; // application.propertiesから値を取得
+    private Environment env; 
 
     public void sendResetLink(String toEmail, String resetLink) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -22,10 +22,9 @@ public class EmailService {
         message.setText(
             "以下のリンクからパスワードを再設定してください。\n\n" +
             resetLink + "\n\n" +
-            "※このリンクは15分間有効です。\n\n" +
-            "ご不明な点がある場合はサポートまでご連絡ください。"
+            "※このリンクは15分間有効です。\n\n" 
         );
-        message.setFrom(env.getProperty("spring.mail.username")); // 差出人
+        message.setFrom(env.getProperty("spring.mail.username")); 
 
         mailSender.send(message);
     }

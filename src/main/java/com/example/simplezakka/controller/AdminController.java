@@ -19,9 +19,6 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
     
-    /**
-     * ログイン画面表示
-     */
     @GetMapping("/login")
     public String showLogin(HttpSession session, Model model) {
         // 既にログイン済みの場合はダッシュボードにリダイレクト
@@ -31,9 +28,6 @@ public class AdminController {
         return "admin/login";
     }
     
-    /**
-     * ログイン処理API
-     */
     @PostMapping("/api/login")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginData, HttpSession session) {
@@ -74,9 +68,6 @@ public class AdminController {
         }
     }
     
-    /**
-     * ダッシュボード表示
-     */
     @GetMapping("/dashboard")
     public String showDashboard(HttpSession session, Model model) {
         Admin admin = (Admin) session.getAttribute("admin");
@@ -86,19 +77,13 @@ public class AdminController {
         model.addAttribute("admin", admin);
         return "admin/dashboard";
     }
-    
-    /**
-     * ログアウト処理
-     */
+   
     @PostMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/admin/login";
     }
     
-    /**
-     * ログアウト処理API
-     */
     @PostMapping("/api/logout")
     @ResponseBody
     public ResponseEntity<?> logoutApi(HttpSession session) {
@@ -116,10 +101,7 @@ public class AdminController {
             ));
         }
     }
-    
-    /**
-     * 現在のログイン状態確認API
-     */
+   
     @GetMapping("/api/status")
     @ResponseBody
     public ResponseEntity<?> getLoginStatus(HttpSession session) {
