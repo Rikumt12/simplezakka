@@ -79,16 +79,16 @@ public class AdminController {
             return "redirect:/admin/login";
         }
 
-        // 管理者情報をモデルにセット
+       
         model.addAttribute("admin", admin);
 
-        // 商品一覧を取得してモデルにセット
+        
         List<ProductListItem> products = productService.findAllProducts();
         System.out.println("管理画面の商品件数: " + products.size());
         products.forEach(p -> System.out.println(p.getProductId() + " : " + p.getName()));
         model.addAttribute("products", products);
 
-        // admin/dashboard.html に管理者情報も商品一覧も渡して表示
+        
         return "admin/dashboard";
     }
 

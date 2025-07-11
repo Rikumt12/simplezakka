@@ -11,7 +11,7 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ← 追加: 管理者の名前（氏名や表示名）
+
     @Column(nullable = false)
     private String name;
 
@@ -41,7 +41,7 @@ public class Admin {
     
     public Admin() {}
 
-    // ← コンストラクタに name を追加
+
     public Admin(String name, String username, String password, String email, String role) {
         this.name = name;
         this.username = username;
@@ -146,7 +146,7 @@ public class Admin {
     public String toString() {
         return "Admin{" +
                 "id=" + id +
-                ", name='" + name + '\'' +  // ← 追加
+                ", name='" + name + '\'' +  
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", role='" + role + '\'' +

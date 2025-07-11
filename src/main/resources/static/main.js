@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // モーダル要素の取得
+
     const productModal = new bootstrap.Modal(document.getElementById('productModal'));
     const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
     const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));

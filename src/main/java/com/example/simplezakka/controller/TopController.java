@@ -8,6 +8,6 @@ public class TopController {
 
     @GetMapping("/top")
     public String topPage() {
-        return "top"; // templates/top.html を表示する
+        return "top"; 
     }
 }
