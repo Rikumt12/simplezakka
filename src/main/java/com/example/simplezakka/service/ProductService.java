@@ -17,9 +17,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    /**
-     * 顧客向け：商品一覧を ProductListItem DTO として返す
-     */
+ 
     public List<ProductListItem> findAllProducts() {
         return productRepository.findAll().stream()
                 .map(p -> new ProductListItem(
@@ -31,9 +29,6 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 顧客向け：商品詳細を ProductDetail DTO として返す
-     */
     public ProductDetail findProductById(Integer id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("商品が見つかりませんでした (ID: " + id + ")"));
@@ -48,9 +43,7 @@ public class ProductService {
         );
     }
 
-    /**
-     * 管理者向け：商品エンティティをそのまま返す（表形式で表示用）
-     */
+
     public List<Product> findAllProductEntities() {
         return productRepository.findAll();
     }

@@ -11,12 +11,12 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable() // フォームのPOSTエラー防止（開発中はOK）
+            .csrf().disable() 
             .authorizeHttpRequests(authz -> authz
-                .anyRequest().permitAll() // すべてのリクエストを許可
+                .anyRequest().permitAll() 
             )
             .headers(headers -> headers
-                .frameOptions().disable() // H2コンソール表示のためにframeを許可
+                .frameOptions().disable() 
             );
 
         return http.build();
