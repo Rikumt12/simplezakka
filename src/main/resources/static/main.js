@@ -1,9 +1,3 @@
-承知いたしました。main.js の修正を必要最低限に抑え、検索機能を追加します。
-
-main.js は以下のようになります。
-
-JavaScript
-
 document.addEventListener('DOMContentLoaded', function() {
     // モーダル要素の取得
     const productModal = new bootstrap.Modal(document.getElementById('productModal'));
