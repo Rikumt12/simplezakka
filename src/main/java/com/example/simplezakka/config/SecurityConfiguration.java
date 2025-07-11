@@ -22,13 +22,20 @@ public class SecurityConfiguration {
         http
             .csrf().disable()
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/admin/login", "/admin/api/login", "/api/**", "/", "/static/**", "/h2-console/**").permitAll()
+                .requestMatchers(
+                    "/admin/login",
+                    "/admin/api/login",
+                    "/api/**",
+                    "/",
+                    "/static/**",
+                    "/h2-console/**"
+                ).permitAll()
                 .requestMatchers("/admin/**").authenticated()
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form
-                .loginPage("/admin/login")
-                .defaultSuccessUrl("/admin/dashboard")
+                .loginPage("/admin/login")            
+                .defaultSuccessUrl("/admin/dashboard", true)     
                 .permitAll()
             )
             .logout(logout -> logout
@@ -41,7 +48,7 @@ public class SecurityConfiguration {
                 .maxSessionsPreventsLogin(false)
             );
         
-        // H2コンソール用の設定
+        // H2コンソールのフレームを許可
         http.headers().frameOptions().disable();
         
         return http.build();

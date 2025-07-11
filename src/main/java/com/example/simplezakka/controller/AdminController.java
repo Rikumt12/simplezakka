@@ -13,15 +13,13 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
-@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:5500"}) // CORS設定追加
+@CrossOrigin(origins = {"http://127.0.0.1:5500", "http://localhost:5500"}) 
 public class AdminController {
     
     @Autowired
     private AdminService adminService;
     
-    /**
-     * ログイン画面表示
-     */
+  
     @GetMapping("/login")
     public String showLogin(HttpSession session, Model model) {
         // 既にログイン済みの場合はダッシュボードにリダイレクト
@@ -30,18 +28,14 @@ public class AdminController {
         }
         return "admin/login";
     }
-    
-    /**
-     * ログイン処理API
-     */
+
     @PostMapping("/api/login")
     @ResponseBody
     public ResponseEntity<?> login(@RequestBody Map<String, String> loginData, HttpSession session) {
         try {
             String username = loginData.get("username");
             String password = loginData.get("password");
-            
-            // 入力値検証
+
             if (username == null || username.trim().isEmpty() || 
                 password == null || password.trim().isEmpty()) {
                 return ResponseEntity.ok(Map.of(
@@ -49,11 +43,10 @@ public class AdminController {
                     "error", "管理者IDとパスワードを入力してください"
                 ));
             }
-            
-            // 認証処理
+
             Admin admin = adminService.authenticate(username.trim(), password);
             if (admin != null) {
-                // セッションに管理者情報を保存
+
                 session.setAttribute("admin", admin);
                 return ResponseEntity.ok(Map.of(
                     "success", true,
@@ -66,17 +59,14 @@ public class AdminController {
                 ));
             }
         } catch (Exception e) {
-            e.printStackTrace(); // ログ出力
+            e.printStackTrace(); 
             return ResponseEntity.ok(Map.of(
                 "success", false,
                 "error", "ログイン処理中にエラーが発生しました"
             ));
         }
     }
-    
-    /**
-     * ダッシュボード表示
-     */
+
     @GetMapping("/dashboard")
     public String showDashboard(HttpSession session, Model model) {
         Admin admin = (Admin) session.getAttribute("admin");
@@ -86,19 +76,14 @@ public class AdminController {
         model.addAttribute("admin", admin);
         return "admin/dashboard";
     }
-    
-    /**
-     * ログアウト処理
-     */
+
     @PostMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/admin/login";
     }
     
-    /**
-     * ログアウト処理API
-     */
+
     @PostMapping("/api/logout")
     @ResponseBody
     public ResponseEntity<?> logoutApi(HttpSession session) {
@@ -116,10 +101,7 @@ public class AdminController {
             ));
         }
     }
-    
-    /**
-     * 現在のログイン状態確認API
-     */
+
     @GetMapping("/api/status")
     @ResponseBody
     public ResponseEntity<?> getLoginStatus(HttpSession session) {
