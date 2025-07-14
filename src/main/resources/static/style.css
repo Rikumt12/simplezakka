@@ -16,9 +16,20 @@
 
 .card-body {
     margin-bottom: 0;
-    padding-bottom: 1rem; /* 必要なら調整 */
+    padding-bottom: 1rem; 
 }
 
 .product-card .btn {
     margin-bottom: 0;
+}
+
+.col,
+.product-card,
+.product-card .btn,
+#products-container,
+.row {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  padding-top: 0 !important;
+  margin-top: 0 !important;
 }
