@@ -89,7 +89,7 @@ public class DataLoader implements CommandLineRunner {
                 "陶器フラワーベース", 
                 "手作りの風合いが魅力の陶器製フラワーベース。シンプルな形状で花を引き立てます。", 
                 4000, 
-                15, ×
+                15, 
                 "/images/flower-vase.png", 
                 false,
                 "リビングインテリア"
