@@ -38,7 +38,7 @@ public class DataLoader implements CommandLineRunner {
         List<Category> categories = Arrays.asList(
             createCategory("デスク周辺"),
             createCategory("リビングインテリア"),
-            createCategory("キッチン"),
+            createCategory("キッチン用品"),
             createCategory("おでかけ"),
             createCategory("バス・トイレ")
         );
