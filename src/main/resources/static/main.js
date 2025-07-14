@@ -1,39 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
-
     const productModal = new bootstrap.Modal(document.getElementById('productModal'));
     const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
     const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
     const orderCompleteModal = new bootstrap.Modal(document.getElementById('orderCompleteModal'));
-    
+   
     // APIのベースURL
     const API_BASE = '/api';
+    // 商品一覧の取得と表示
+    fetchProducts();
+    document.getElementById('category-select').addEventListener('change', function() {
+    const selectedCategory = this.value;
+    fetchProducts(selectedCategory);  
+});
 
     // 全ての商品データを保持する変数（検索機能のために追加）
     let allProducts = []; 
-    
-    // 商品一覧の取得と表示
-    fetchProducts();
-    
-    // カート情報の取得と表示
-    updateCartDisplay();
-    
-    // カートボタンクリックイベント
-    document.getElementById('cart-btn').addEventListener('click', function() {
-        updateCartModalContent();
-        cartModal.show();
-    });
-    
-    // 注文手続きボタンクリックイベント
-    document.getElementById('checkout-btn').addEventListener('click', function() {
-        cartModal.hide();
-        checkoutModal.show();
-    });
-    
-    // 注文確定ボタンクリックイベント
-    document.getElementById('confirm-order-btn').addEventListener('click', function() {
-        submitOrder();
-    });
-    
+
     // --- 検索機能関連の追加 ---
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
@@ -47,54 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
             filterAndDisplayProducts(searchInput.value);
         }
     });
-
-    // 商品一覧を取得して表示する関数
-    async function fetchProducts() {
-        try {
-            const response = await fetch(`${API_BASE}/products`);
-            if (!response.ok) {
-                throw new Error('商品の取得に失敗しました');
-            }
-            const products = await response.json();
-            allProducts = products; // 取得した全商品を保存
-            displayProducts(products);
-        } catch (error) {
-            console.error('Error:', error);
-            alert('商品の読み込みに失敗しました');
-        }
-    }
-    
-    // 商品一覧を表示する関数
-    function displayProducts(productsToDisplay) { // 引数名を変更
-        const container = document.getElementById('products-container');
-        container.innerHTML = '';
-        
-        if (productsToDisplay.length === 0) {
-            container.innerHTML = '<p class="text-center">該当する商品が見つかりませんでした。</p>';
-            return;
-        }
-
-        productsToDisplay.forEach(product => {
-            const card = document.createElement('div');
-            card.className = 'col';
-            card.innerHTML = `
-                <div class="card product-card">
-                    <img src="${product.imageUrl || 'https://via.placeholder.com/300x200'}" class="card-img-top" alt="${product.name}">
-                    <div class="card-body">
-                        <h5 class="card-title">${product.name}</h5>
-                        <p class="card-text">¥${product.price.toLocaleString()}</p>
-                        <button class="btn btn-outline-primary view-product" data-id="${product.productId}">詳細を見る</button>
-                    </div>
-                </div>
-            `;
-            container.appendChild(card);
-            
-            // 詳細ボタンのイベント設定
-            card.querySelector('.view-product').addEventListener('click', function() {
-                fetchProductDetail(product.productId);
-            });
-        });
-    }
 
     // 商品をフィルタリングして表示する関数（検索機能のために追加）
     function filterAndDisplayProducts(searchTerm) {
@@ -112,7 +46,77 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         displayProducts(filteredProducts);
     }
-    
+   
+    // カート情報の取得と表示
+    updateCartDisplay();
+   
+    // カートボタンクリックイベント
+    document.getElementById('cart-btn').addEventListener('click', function() {
+        updateCartModalContent();
+        cartModal.show();
+    });
+   
+    // 注文手続きボタンクリックイベント
+    document.getElementById('checkout-btn').addEventListener('click', function() {
+        cartModal.hide();
+        checkoutModal.show();
+    });
+   
+    // 注文確定ボタンクリックイベント
+    document.getElementById('confirm-order-btn').addEventListener('click', function() {
+        submitOrder();
+    });
+ 
+   
+    // 商品一覧を取得して表示する関数
+    async function fetchProducts(category = null) {
+    try {
+        let url = `${API_BASE}/products`;
+        if (category) {
+            url += `?category=${encodeURIComponent(category)}`;
+        }
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('商品の取得に失敗しました');
+        }
+        const products = await response.json();
+        displayProducts(products);
+    } catch (error) {
+        console.error('Error:', error);
+        alert('商品の読み込みに失敗しました');
+    }
+}
+　　
+   
+    // 商品一覧を表示する関数
+    function displayProducts(products) {
+        const container = document.getElementById('products-container');
+        container.innerHTML = '';
+       
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'col';
+            card.innerHTML = `
+                <div class="card product-card">
+                    <img src="${product.imageUrl || 'https://via.placeholder.com/300x200'}" class="card-img-top" alt="${product.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${product.name}</h5>
+                        <p class="card-text">¥${product.price.toLocaleString()}</p>
+                        <button class="btn btn-outline-primary view-product" data-id="${product.productId}">詳細を見る</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+           
+            // 詳細ボタンのイベント設定
+            card.querySelector('.view-product').addEventListener('click', function() {
+                fetchProductDetail(product.productId);
+            });
+        });
+    }
+   
+ 
+   
     // 商品詳細を取得する関数
     async function fetchProductDetail(productId) {
         try {
@@ -127,11 +131,11 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('商品詳細の読み込みに失敗しました');
         }
     }
-    
+   
     // 商品詳細を表示する関数
     function displayProductDetail(product) {
         document.getElementById('productModalTitle').textContent = product.name;
-        
+       
         const modalBody = document.getElementById('productModalBody');
         modalBody.innerHTML = `
             <div class="row">
@@ -150,16 +154,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        
+       
         // カートに追加ボタンのイベント設定
         modalBody.querySelector('.add-to-cart').addEventListener('click', function() {
             const quantity = parseInt(document.getElementById('quantity').value);
             addToCart(product.productId, quantity);
         });
-        
+       
         productModal.show();
     }
-    
+   
     // カートに商品を追加する関数
     async function addToCart(productId, quantity) {
         try {
@@ -173,14 +177,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     quantity: quantity
                 })
             });
-            
+           
             if (!response.ok) {
                 throw new Error('カートへの追加に失敗しました');
             }
-            
+           
             const cart = await response.json();
             updateCartBadge(cart.totalQuantity);
-            
+           
             productModal.hide();
             alert('商品をカートに追加しました');
         } catch (error) {
@@ -188,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('カートへの追加に失敗しました');
         }
     }
-    
+   
     // カート情報を取得する関数
     async function updateCartDisplay() {
         try {
@@ -202,12 +206,12 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
         }
     }
-    
+   
     // カートバッジを更新する関数
     function updateCartBadge(count) {
         document.getElementById('cart-count').textContent = count;
     }
-    
+   
     // カートモーダルの内容を更新する関数
     async function updateCartModalContent() {
         try {
@@ -222,11 +226,11 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('カート情報の読み込みに失敗しました');
         }
     }
-    
+   
     // カート内容を表示する関数
     function displayCart(cart) {
         const modalBody = document.getElementById('cartModalBody');
-        
+       
         if (cart.items && Object.keys(cart.items).length > 0) {
             let html = `
                 <table class="table">
@@ -241,15 +245,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     </thead>
                     <tbody>
             `;
-            
+           
             Object.values(cart.items).forEach(item => {
                 html += `
                     <tr>
                         <td>${item.name}</td>
                         <td>¥${item.price.toLocaleString()}</td>
                         <td>
-                            <input type="number" class="form-control form-control-sm update-quantity" 
-                                        data-id="${item.id}" value="${item.quantity}" min="1" style="width: 70px">
+                            <input type="number" class="form-control form-control-sm update-quantity"
+                                   data-id="${item.id}" value="${item.quantity}" min="1" style="width: 70px">
                         </td>
                         <td>¥${item.subtotal.toLocaleString()}</td>
                         <td>
@@ -258,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </tr>
                 `;
             });
-            
+           
             html += `
                     </tbody>
                     <tfoot>
@@ -270,23 +274,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     </tfoot>
                 </table>
             `;
-            
+           
             modalBody.innerHTML = html;
-            
+           
             // 数量更新イベントの設定
             document.querySelectorAll('.update-quantity').forEach(input => {
                 input.addEventListener('change', function() {
                     updateItemQuantity(this.dataset.id, this.value);
                 });
             });
-            
+           
             // 削除ボタンイベントの設定
             document.querySelectorAll('.remove-item').forEach(button => {
                 button.addEventListener('click', function() {
                     removeItem(this.dataset.id);
                 });
             });
-            
+           
             // 注文ボタンの有効化
             document.getElementById('checkout-btn').disabled = false;
         } else {
@@ -294,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('checkout-btn').disabled = true;
         }
     }
-    
+   
     // カート内の商品数量を更新する関数
     async function updateItemQuantity(itemId, quantity) {
         try {
@@ -307,11 +311,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     quantity: parseInt(quantity)
                 })
             });
-            
+           
             if (!response.ok) {
                 throw new Error('数量の更新に失敗しました');
             }
-            
+           
             const cart = await response.json();
             displayCart(cart);
             updateCartBadge(cart.totalQuantity);
@@ -321,18 +325,18 @@ document.addEventListener('DOMContentLoaded', function() {
             updateCartModalContent(); // 失敗時は元の状態に戻す
         }
     }
-    
+   
     // カート内の商品を削除する関数
     async function removeItem(itemId) {
         try {
             const response = await fetch(`${API_BASE}/cart/items/${itemId}`, {
                 method: 'DELETE'
             });
-            
+           
             if (!response.ok) {
                 throw new Error('商品の削除に失敗しました');
             }
-            
+           
             const cart = await response.json();
             displayCart(cart);
             updateCartBadge(cart.totalQuantity);
@@ -341,17 +345,17 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('商品の削除に失敗しました');
         }
     }
-    
+   
     // 注文を確定する関数
     async function submitOrder() {
         const form = document.getElementById('order-form');
-        
+       
         // フォームバリデーション
         if (!form.checkValidity()) {
             form.classList.add('was-validated');
             return;
         }
-        
+       
         const orderData = {
             customerInfo: {
                 name: document.getElementById('name').value,
@@ -360,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 phoneNumber: document.getElementById('phone').value
             }
         };
-        
+       
         try {
             const response = await fetch(`${API_BASE}/orders`, {
                 method: 'POST',
@@ -369,20 +373,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify(orderData)
             });
-            
+           
             if (!response.ok) {
                 throw new Error('注文の確定に失敗しました');
             }
-            
+           
             const order = await response.json();
             displayOrderComplete(order);
-            
+           
             checkoutModal.hide();
             orderCompleteModal.show();
-            
+           
             // カート表示をリセット
             updateCartBadge(0);
-            
+           
             // フォームリセット
             form.reset();
             form.classList.remove('was-validated');
@@ -391,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('注文の確定に失敗しました');
         }
     }
-    
+   
     // 注文完了画面を表示する関数
     function displayOrderComplete(order) {
         document.getElementById('orderCompleteBody').innerHTML = `
@@ -400,4 +404,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <p>お客様のメールアドレスに注文確認メールをお送りしました。</p>
         `;
     }
+   
+ 
 });
+ 
