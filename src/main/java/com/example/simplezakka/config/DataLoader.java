@@ -165,9 +165,7 @@ public class DataLoader implements CommandLineRunner {
                 "/images/sopedispenser.png",
                 true,
                 bath
- 
             ),
-     
              createProduct(
                 "珪藻土バスマット",
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
@@ -184,8 +182,7 @@ public class DataLoader implements CommandLineRunner {
                 35, 
                 "/images/note.png", 
                 true,
-                desk    
-               
+                desk      
             ),
             createProduct(
                 "ペン立て(木製)",
@@ -195,7 +192,6 @@ public class DataLoader implements CommandLineRunner {
                  "/images/penntate.png",
                 true,
                 desk
- 
             ),
              createProduct(
                 "カレンダー（2025）",
@@ -205,7 +201,6 @@ public class DataLoader implements CommandLineRunner {
                 "/images/karennda-.png",
                 true,
                 desk
- 
             ),
              createProduct(
                 "ウォーターボトル",
@@ -215,7 +210,6 @@ public class DataLoader implements CommandLineRunner {
                 "/images/suitou.png",
                 true,
                 outside
- 
             ),
              createProduct(
                 "折りたたみかさ",
@@ -225,7 +219,6 @@ public class DataLoader implements CommandLineRunner {
                  "/images/kasa.jpg",
                 true,
                 outside
- 
             ),
             createProduct(
                 "ガラス保存容器セット",
