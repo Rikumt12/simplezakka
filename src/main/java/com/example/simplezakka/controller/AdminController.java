@@ -93,12 +93,12 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    @GetMapping("admin/forgot-password") 
+    @GetMapping("/forgot-password") 
     public String showForgotPassword() {
         return "admin/forgot-password";
     }
 
-    @GetMapping("admin/reset-password")
+    @GetMapping("/reset-password")
     public String showResetPassword(@RequestParam("token") String token, Model model) {
         model.addAttribute("token", token);
         return "admin/reset-password";
