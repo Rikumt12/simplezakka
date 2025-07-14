@@ -128,7 +128,7 @@ public class DataLoader implements CommandLineRunner {
                 35, 
                 "/images/keisoudo.png", 
                 true,
-                "キッチン"
+                "バス・トイレ"
             ),
              createProduct(
                 "ベーシックノート", 
