@@ -184,7 +184,7 @@ public class DataLoader implements CommandLineRunner {
                 35, 
                 "/images/note.png", 
                 true,
-                "デスク周辺"     
+                desk    
                
             ),
             createProduct(
