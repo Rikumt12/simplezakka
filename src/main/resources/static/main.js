@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
 function filterAndDisplayProducts(searchTerm) {
     fetchProducts();
     const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
-
     const filteredProducts = lowerCaseSearchTerm === ''
         ? allProducts
         : allProducts.filter(product => {
@@ -42,7 +41,6 @@ function filterAndDisplayProducts(searchTerm) {
             const descMatch = product.description?.toLowerCase().includes(lowerCaseSearchTerm);
             return nameMatch || descMatch;
         });
-
     displayProducts(filteredProducts);
 }
    
