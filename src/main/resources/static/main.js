@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
    
     // APIのベースURL
     const API_BASE = '/api';
+    
     // 商品一覧の取得と表示
     fetchProducts();
     document.getElementById('category-select').addEventListener('change', function() {
