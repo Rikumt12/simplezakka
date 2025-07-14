@@ -51,7 +51,7 @@ public class ForgotPasswordController {
             }
 
             String token = tokenService.createToken(email);
-            String resetLink = "http://localhost:8080/admin/reset-password.html?token=" + token;
+            String resetLink = "http://localhost:8080/admin/reset-password?token=" + token;
 
             emailService.sendResetLink(email, resetLink);
             logger.info("パスワード再設定リンクを送信: {}", email);

@@ -92,13 +92,29 @@ public class AdminController {
         
         return "admin/dashboard";
     }
+    
+    @GetMapping("/login")
+    public String login() {
+        return "admin/login";
+    }
+
+    @GetMapping("/forgot-password") 
+    public String showForgotPassword() {
+        return "admin/forgot-password";
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPassword(@RequestParam("token") String token, Model model) {
+        model.addAttribute("token", token);
+        return "admin/reset-password";
+    }   
 
     @PostMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/admin/login";
     }
-
+    
     @PostMapping("/api/logout")
     @ResponseBody
     public ResponseEntity<?> logoutApi(HttpSession session) {
