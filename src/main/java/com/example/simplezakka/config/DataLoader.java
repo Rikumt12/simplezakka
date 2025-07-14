@@ -176,16 +176,6 @@ public class DataLoader implements CommandLineRunner {
                 "/images/keisoudo.png",
                 true,
                 kitchen
- 
-            ),
-             createProduct(
-                "ベーシックノート",
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
-                500,
-                35,
-                "/images/note.png",
-                true,
-                "バス・トイレ"
             ),
              createProduct(
                 "ベーシックノート", 
