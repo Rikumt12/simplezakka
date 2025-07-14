@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('category-select').addEventListener('change', function() {
     const selectedCategory = this.value;
     fetchProducts(selectedCategory); 
-    allProducts = products; 
 });
 
     // 全ての商品データを保持する変数（検索機能のために追加）
@@ -45,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 (product.description && product.description.toLowerCase().includes(lowerCaseSearchTerm))
             );
         }
-        allProducts = products;
         displayProducts(filteredProducts);
     }
    
