@@ -106,7 +106,7 @@ public class AdminController {
     @GetMapping("/reset-password")
     public String showResetPassword(@RequestParam("token") String token, Model model) {
         model.addAttribute("token", token);
-        return "admin/reset-password";
+        return ":/admin/reset-password.html";
     }   
 
     @PostMapping("/logout")
