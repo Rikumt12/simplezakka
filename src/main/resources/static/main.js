@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     fetchProducts();
     document.getElementById('category-select').addEventListener('change', function() {
     const selectedCategory = this.value;
-    fetchProducts(selectedCategory);  
+    fetchProducts(selectedCategory); 
+    allProducts = products; 
 });
 
     // 全ての商品データを保持する変数（検索機能のために追加）
