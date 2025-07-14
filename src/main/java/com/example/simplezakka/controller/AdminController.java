@@ -94,7 +94,7 @@ public class AdminController {
     }
     
     @GetMapping("/login")
-    public String login() {
+    public String showLogin() {
         return "redirect:/admin/login";
     }
 
