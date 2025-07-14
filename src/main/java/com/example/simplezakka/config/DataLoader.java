@@ -114,16 +114,16 @@ public class DataLoader implements CommandLineRunner {
             ),
              createProduct(
                 "ソープディスペンサー", 
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                "シンプルで洗練されたデザインのソープディスペンサー。", 
                 1800, 
                 35, 
                 "/images/sopedispenser.png", 
                 true,
-                "おでかけ"
+                "キッチン"
             ),
              createProduct(
                 "珪藻土バスマット", 
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                "水分を素早く吸収する珪藻土素材のバスマット。お手入れも簡単。", 
                 1500, 
                 35, 
                 "/images/keisoudo.png", 
@@ -132,7 +132,7 @@ public class DataLoader implements CommandLineRunner {
             ),
              createProduct(
                 "ベーシックノート", 
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                "書き心地の良い紙を使用したシンプルなノート。日常使いに最適。", 
                 500, 
                 35, 
                 "/images/note.png", 
@@ -141,7 +141,7 @@ public class DataLoader implements CommandLineRunner {
             ),
             createProduct(
                 "ペン立て(木製)", 
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                "天然木を使用したナチュラルな雰囲気のペン立て。デスク周りをすっきり整理。", 
                 2500, 
                 35, 
                  "/images/penntate.png", 
@@ -150,7 +150,7 @@ public class DataLoader implements CommandLineRunner {
             ),
              createProduct(
                 "カレンダー（2025）", 
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                "シンプルで見やすいレイアウトの2025年版カレンダー。", 
                 900, 
                 35, 
                 "/images/karennda-.png", 
@@ -159,23 +159,21 @@ public class DataLoader implements CommandLineRunner {
             ),
              createProduct(
                 "ウォーターボトル", 
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                "軽量で持ち運びやすいウォーターボトル。おでかけにぴったり。", 
                 2300, 
                 35, 
                 "/images/suitou.png", 
                 true,
                 "おでかけ"
-
             ),
              createProduct(
                 "折りたたみかさ", 
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
+                "コンパクトに折りたためるシンプルな傘。突然の雨にも安心。", 
                 3200, 
                 35, 
                 "/images/kasa.jpg", 
                 true,
                 "おでかけ"
-
             ),
             createProduct(
                 "ガラス保存容器セット", 
