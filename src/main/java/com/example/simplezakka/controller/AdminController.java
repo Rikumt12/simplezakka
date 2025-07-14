@@ -92,11 +92,6 @@ public class AdminController {
         
         return "admin/dashboard";
     }
-    
-    @GetMapping("/login")
-    public String showLogin() {
-        return "redirect:/admin/login";
-    }
 
     @GetMapping("/forgot-password") 
     public String showForgotPassword() {
