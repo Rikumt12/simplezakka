@@ -30,22 +30,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 商品をフィルタリングして表示する関数（検索機能のために追加）
-    function filterAndDisplayProducts(searchTerm) {
-        const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
-        let filteredProducts = [];
+    // 商品をフィルタリングして表示する関数（検索機能のために修正済み）
+function filterAndDisplayProducts(searchTerm) {
+    const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
 
-        if (lowerCaseSearchTerm === '') {
-            filteredProducts = allProducts; // 検索語がない場合は全商品を表示
-        } else {
-            // 商品名または説明にキーワードが含まれる商品をフィルタリング
-            filteredProducts = allProducts.filter(product => 
-                product.name.toLowerCase().includes(lowerCaseSearchTerm) ||
-                (product.description && product.description.toLowerCase().includes(lowerCaseSearchTerm))
-            );
-        }
-        displayProducts(filteredProducts);
-    }
+    const filteredProducts = lowerCaseSearchTerm === ''
+        ? allProducts
+        : allProducts.filter(product => {
+            const nameMatch = product.name?.toLowerCase().includes(lowerCaseSearchTerm);
+            const descMatch = product.description?.toLowerCase().includes(lowerCaseSearchTerm);
+            return nameMatch || descMatch;
+        });
+
+    displayProducts(filteredProducts);
+}
    
     // カート情報の取得と表示
     updateCartDisplay();
