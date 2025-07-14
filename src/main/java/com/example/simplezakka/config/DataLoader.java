@@ -38,7 +38,7 @@ public class DataLoader implements CommandLineRunner {
         List<Category> categories = Arrays.asList(
             createCategory("デスク周辺"),
             createCategory("リビングインテリア"),
-            createCategory("キッチン"),
+            createCategory("キッチン用品"),
             createCategory("おでかけ"),
             createCategory("バス・トイレ")
         );
@@ -66,8 +66,8 @@ public class DataLoader implements CommandLineRunner {
         Category living = categoryRepository.findByCategoryName("リビングインテリア")
                     .orElseThrow(() -> new RuntimeException("Category not found: リビングインテリア"));
  
-        Category kitchen = categoryRepository.findByCategoryName("キッチン")
-                    .orElseThrow(() -> new RuntimeException("Category not found: キッチン"));
+        Category kitchen = categoryRepository.findByCategoryName("キッチン用品")
+                    .orElseThrow(() -> new RuntimeException("Category not found: キッチン用品"));
  
         Category outside = categoryRepository.findByCategoryName("おでかけ")
                     .orElseThrow(() -> new RuntimeException("Category not found: おでかけ"));
@@ -165,9 +165,7 @@ public class DataLoader implements CommandLineRunner {
                 "/images/soped.png",
                 true,
                 bath
- 
             ),
-     
              createProduct(
                 "珪藻土バスマット",
                 "水分を素早く吸収する珪藻土素材のバスマット。お手入れも簡単。",
@@ -176,6 +174,7 @@ public class DataLoader implements CommandLineRunner {
                 "/images/keisoudo.png",
                 true,
                 bath
+
  
             ),
              createProduct(
@@ -184,9 +183,9 @@ public class DataLoader implements CommandLineRunner {
                 500,
                 35,
                 "/images/note.png",
+
                 true,
-                desk
-               
+                desk      
             ),
             createProduct(
                 "ペン立て(木製)",
@@ -196,7 +195,6 @@ public class DataLoader implements CommandLineRunner {
                  "/images/penntate.png",
                 true,
                 desk
- 
             ),
              createProduct(
                 "カレンダー（2025）",
@@ -206,7 +204,6 @@ public class DataLoader implements CommandLineRunner {
                 "/images/karennda-.png",
                 true,
                 desk
- 
             ),
              createProduct(
                 "ウォーターボトル",
@@ -216,7 +213,6 @@ public class DataLoader implements CommandLineRunner {
                 "/images/suitou.png",
                 true,
                 outside
- 
             ),
             createProduct(
                 "カトラリー",
@@ -316,7 +312,6 @@ public class DataLoader implements CommandLineRunner {
                  "/images/kasa.jpg",
                 true,
                 outside
- 
             ),
             createProduct(
                 "ガラス保存容器セット",
