@@ -14,9 +14,11 @@
     right: 5px;
 }
 
-.product-image {
-    width: 180px;
-    height: 180px;
-    object-fit: contain;
-    display: block;
+.card-body {
+    margin-bottom: 0;
+    padding-bottom: 1rem; /* 必要なら調整 */
+}
+
+.product-card .btn {
+    margin-bottom: 0;
 }
