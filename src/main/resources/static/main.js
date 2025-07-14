@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         productsToDisplay.forEach(product => {
             const card = document.createElement('div');
             card.className = 'col';
+            card.style.marginBottom = '0'; // 明示的に余白をなくす
             card.innerHTML = `
                 <div class="card product-card">
                     <img src="${product.imageUrl || 'https://via.placeholder.com/300x200'}" class="card-img-top" alt="${product.name}">
