@@ -9,6 +9,7 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
+
     <div class="container">
         <header class="d-flex flex-wrap justify-content-between py-3 mb-4 border-bottom">
              <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
@@ -33,7 +34,23 @@
                 </div>
             </div> 
         </div> 
-
+    <div class="container mt-4">
+  　　<div class="mb-3">
+    　<label for="category-select" class="form-label">カテゴリ：</label>
+   　 　<select id="category-select" class="form-select w-auto d-inline-block">
+      　　<option value="">すべて</option>
+      　　<option value="キッチン用品">キッチン用品</option>
+      　　<option value="リビングインテリア">リビングインテリア</option>
+      　　<option value="デスク周辺">デスク周辺</option>
+      　　<option value="おでかけ">おでかけ</option>
+      　　<option value="バス・トイレ">バス・トイレ</option>
+    　　</select>
+  　　</div>
+ 
+  　　<div id="products" class="row">
+    <!-- 商品一覧 -->
+  　　</div>
+　　</div>
         <div id="products-container" class="row row-cols-1 row-cols-md-3 g-4 mb-5">
             <!-- 商品リストがここに表示される -->
         </div>
