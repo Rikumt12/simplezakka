@@ -66,8 +66,8 @@ public class DataLoader implements CommandLineRunner {
         Category living = categoryRepository.findByCategoryName("リビングインテリア")
                     .orElseThrow(() -> new RuntimeException("Category not found: リビングインテリア"));
  
-        Category kitchen = categoryRepository.findByCategoryName("キッチン")
-                    .orElseThrow(() -> new RuntimeException("Category not found: キッチン"));
+        Category kitchen = categoryRepository.findByCategoryName("キッチン用品")
+                    .orElseThrow(() -> new RuntimeException("Category not found: キッチン用品"));
  
         Category outside = categoryRepository.findByCategoryName("おでかけ")
                     .orElseThrow(() -> new RuntimeException("Category not found: おでかけ"));
