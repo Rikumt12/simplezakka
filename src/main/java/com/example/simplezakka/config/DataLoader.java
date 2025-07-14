@@ -178,9 +178,9 @@ public class DataLoader implements CommandLineRunner {
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。", 
                 3200, 
                 35, 
-                 "/images/kasa.jpg", 
+                "/images/kasa.jpg", 
                 true,
-                "キッチン"
+                "おでかけ"
 
             ),
             createProduct(
