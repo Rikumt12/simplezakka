@@ -165,7 +165,6 @@ public class DataLoader implements CommandLineRunner {
                 "/images/suitou.png", 
                 true,
                 "おでかけ"
-
             ),
              createProduct(
                 "折りたたみかさ", 
@@ -175,7 +174,6 @@ public class DataLoader implements CommandLineRunner {
                 "/images/kasa.jpg", 
                 true,
                 "おでかけ"
-
             ),
             createProduct(
                 "ガラス保存容器セット", 
