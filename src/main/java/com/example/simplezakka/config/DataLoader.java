@@ -38,7 +38,7 @@ public class DataLoader implements CommandLineRunner {
         List<Category> categories = Arrays.asList(
             createCategory("デスク周辺"),
             createCategory("リビングインテリア"),
-            createCategory("キッチン"),
+            createCategory("キッチン用品"),
             createCategory("おでかけ"),
             createCategory("バス・トイレ")
         );
@@ -66,8 +66,8 @@ public class DataLoader implements CommandLineRunner {
         Category living = categoryRepository.findByCategoryName("リビングインテリア")
                     .orElseThrow(() -> new RuntimeException("Category not found: リビングインテリア"));
  
-        Category kitchen = categoryRepository.findByCategoryName("キッチン")
-                    .orElseThrow(() -> new RuntimeException("Category not found: キッチン"));
+        Category kitchen = categoryRepository.findByCategoryName("キッチン用品")
+                    .orElseThrow(() -> new RuntimeException("Category not found: キッチン用品"));
  
         Category outside = categoryRepository.findByCategoryName("おでかけ")
                     .orElseThrow(() -> new RuntimeException("Category not found: おでかけ"));
@@ -165,9 +165,7 @@ public class DataLoader implements CommandLineRunner {
                 "/images/sopedispenser.png",
                 true,
                 bath
- 
             ),
-     
              createProduct(
                 "珪藻土バスマット",
                 "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
@@ -175,18 +173,16 @@ public class DataLoader implements CommandLineRunner {
                 35,
                 "/images/keisoudo.png",
                 true,
-                kitchen
- 
+                bath
             ),
              createProduct(
-                "ベーシックノート",
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
-                500,
-                35,
-                "/images/note.png",
+                "ベーシックノート", 
+                "書き心地の良い紙を使用したシンプルなノート。日常使いに最適。", 
+                500, 
+                35, 
+                "/images/note.png", 
                 true,
-                desk
-               
+                desk      
             ),
             createProduct(
                 "ペン立て(木製)",
@@ -196,7 +192,6 @@ public class DataLoader implements CommandLineRunner {
                  "/images/penntate.png",
                 true,
                 desk
- 
             ),
              createProduct(
                 "カレンダー（2025）",
@@ -206,7 +201,6 @@ public class DataLoader implements CommandLineRunner {
                 "/images/karennda-.png",
                 true,
                 desk
- 
             ),
              createProduct(
                 "ウォーターボトル",
@@ -216,7 +210,6 @@ public class DataLoader implements CommandLineRunner {
                 "/images/suitou.png",
                 true,
                 outside
- 
             ),
              createProduct(
                 "折りたたみかさ",
@@ -226,7 +219,6 @@ public class DataLoader implements CommandLineRunner {
                  "/images/kasa.jpg",
                 true,
                 outside
- 
             ),
             createProduct(
                 "ガラス保存容器セット",
