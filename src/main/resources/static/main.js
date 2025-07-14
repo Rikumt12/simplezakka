@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 (product.description && product.description.toLowerCase().includes(lowerCaseSearchTerm))
             );
         }
+        allProducts = products;
         displayProducts(filteredProducts);
     }
    
