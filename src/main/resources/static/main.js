@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('category-select').addEventListener('change', function() {
     const selectedCategory = this.value;
     fetchProducts(selectedCategory);  
-});
+    });
 
     // 全ての商品データを保持する変数（検索機能のために追加）
     let allProducts = []; 
@@ -81,14 +81,16 @@ document.addEventListener('DOMContentLoaded', function() {
             throw new Error('商品の取得に失敗しました');
         }
         const products = await response.json();
-        displayProducts(products);
+        
+        // ★ここを追加または修正: 取得した商品を allProducts に格納
+        allProducts = products; 
+        
+        displayProducts(products); // 取得した商品を表示
     } catch (error) {
         console.error('Error:', error);
         alert('商品の読み込みに失敗しました');
     }
-}
-　　
-   
+    }
     // 商品一覧を表示する関数
     function displayProducts(products) {
         const container = document.getElementById('products-container');
