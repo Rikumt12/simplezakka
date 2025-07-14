@@ -159,10 +159,10 @@ public class DataLoader implements CommandLineRunner {
             ),
              createProduct(
                 "ソープディスペンサー",
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
+                "シンプルで洗練されたデザインのソープディスペンサー。",
                 1800,
                 35,
-                "/images/sopedispenser.png",
+                "/images/soped.png",
                 true,
                 bath
  
@@ -170,17 +170,17 @@ public class DataLoader implements CommandLineRunner {
      
              createProduct(
                 "珪藻土バスマット",
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
+                "水分を素早く吸収する珪藻土素材のバスマット。お手入れも簡単。",
                 1500,
                 35,
                 "/images/keisoudo.png",
                 true,
-                kitchen
+                bath
  
             ),
              createProduct(
                 "ベーシックノート",
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
+                "書き心地の良い紙を使用したシンプルなノート。日常使いに最適。",
                 500,
                 35,
                 "/images/note.png",
@@ -190,7 +190,7 @@ public class DataLoader implements CommandLineRunner {
             ),
             createProduct(
                 "ペン立て(木製)",
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
+                "天然木を使用したナチュラルな雰囲気のペン立て。デスク周りをすっきり整理。",
                 2500,
                 35,
                  "/images/penntate.png",
@@ -200,7 +200,7 @@ public class DataLoader implements CommandLineRunner {
             ),
              createProduct(
                 "カレンダー（2025）",
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
+                "シンプルで見やすいレイアウトの2025年版カレンダー。",
                 900,
                 35,
                 "/images/karennda-.png",
@@ -210,17 +210,107 @@ public class DataLoader implements CommandLineRunner {
             ),
              createProduct(
                 "ウォーターボトル",
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
-                2300,
+                "軽量で持ち運びやすいウォーターボトル。おでかけにぴったり。",
+                900,
                 35,
                 "/images/suitou.png",
                 true,
                 outside
  
             ),
+            createProduct(
+                "カトラリー",
+                "天然素材で作られたラタン調のカトラリー。４つの仕切りで使いやすい構造。",
+                1600,
+                35,
+                "/images/katorari.png",
+                true,
+                kitchen
+ 
+            ),
+            createProduct(
+                "トイレブラシ",
+                "空間になじむ、無駄のないシンプルデザインのトイレブラシ。",
+                1200,
+                35,
+                "/images/toireburasi.png",
+                true,
+                bath
+ 
+            ),
+            createProduct(
+                "タオル",
+                "やわらかなコットン生地が心地よく肌を包む、ふんわりタオル。",
+                400,
+                35,
+                "/images/taoru.png",
+                true,
+                bath
+ 
+            ),
+            createProduct(
+                "スタンドライト",
+                "作業の邪魔をせず、空間に溶け込む穏やかな白のスタンドライト。",
+                3000,
+                35,
+                "/images/stand.png",
+                true,
+                desk
+ 
+            ),
+             createProduct(
+                "観葉植物",
+                "インテリアグリーンとして人気のテーブルヤシ。空間に癒しと清涼感を与える。",
+                5500,
+                35,
+                "/images/kannyou.png",
+                true,
+                living
+ 
+            ),
+             createProduct(
+                "間接照明",
+                "温もりのある灯りが空間をやさしく包む、洗練されたデザインの間接照明。",
+                7000,
+                35,
+                "/images/kannsetsu.png",
+                true,
+                living
+ 
+            ),
+             createProduct(
+                "付箋",
+                "どんな場面でも使用しやすい５色展開のシンプルな付箋。",
+                300,
+                35,
+                "/images/husenn.png",
+                true,
+                desk
+ 
+            ),
+             createProduct(
+                "ハンディファン",
+                "夏の涼しさを保つ、ナチュラルな色合いのハンディファン。",
+                2400,
+                35,
+                "/images/handhifann.png",
+                true,
+                outside
+ 
+            ),
+             createProduct(
+                "エプロン",
+                "やわらかなコットン生地と落ち着いたカラーが魅力のシンプルなエプロン。",
+                2000,
+                35,
+                "/images/epuronn.png",
+                true,
+                kitchen
+ 
+            ),
              createProduct(
                 "折りたたみかさ",
-                "丈夫なキャンバス地で作られたシンプルなトートバッグ。内ポケット付き。",
+                "コンパクトに折りたためるシンプルな傘。突然の雨にも安心。",
                 3200,
                 35,
                  "/images/kasa.jpg",
