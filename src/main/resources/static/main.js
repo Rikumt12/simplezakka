@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 商品をフィルタリングして表示する関数（検索機能のために修正済み）
 function filterAndDisplayProducts(searchTerm) {
+    fetchProducts();
     const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
 
     const filteredProducts = lowerCaseSearchTerm === ''
