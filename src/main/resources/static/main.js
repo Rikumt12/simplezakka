@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <p>お客様のメールアドレスに注文確認メールをお送りしました。</p>
         `;
     }
-   
- 
+    fetchProducts(); // 商品一覧の取得を開始
+    updateCartDisplay(); // 必要に応じてカート情報も読み込む
 });
  
