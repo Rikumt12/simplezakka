@@ -1,28 +1,45 @@
+### ECサイトログイン画面
+GET http://localhost:8080/top
+ 
+ 
 ### 商品一覧取得
 GET http://localhost:8080/api/products
-
+ 
 ### 商品詳細取得
 GET http://localhost:8080/api/products/1
-
+ 
 ### カートに追加
 POST http://localhost:8080/api/cart
 content-type: application/json
-
+ 
 {
-    "productId": 1, 
+    "productId": 1,
     "quantity": 2
 }
-
+ 
 ### カート取得
 GET http://localhost:8080/api/cart
-
+ 
+ 
 ### 注文
 POST http://localhost:8080/api/orders
 content-type: application/json
-
+ 
 {"customerInfo":
     {"name": "テスト",
         "email": "t@e.com",
         "address": "住所",
         "phoneNumber": "123"}
 }
+ 
+### 管理者画面ログイン
+POST http://localhost:8080/admin/login
+//ID:admin
+//pass:admin123
+ 
+### パスワード再設定画面
+POST http://localhost:8080/admin/forgot-password
+ 
+###　管理者ダッシュボード画面
+GET http://localhost:8080/admin/dashboard
+ 
