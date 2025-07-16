@@ -1,101 +1,66 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const productModal = new bootstrap.Modal(document.getElementById('productModal'));
     const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
     const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
     const orderCompleteModal = new bootstrap.Modal(document.getElementById('orderCompleteModal'));
-   
-    // APIのベースURL
+
     const API_BASE = '/api';
-    
-    // 商品一覧の取得と表示
-    fetchProducts();
-    document.getElementById('category-select').addEventListener('change', function() {
-    const selectedCategory = this.value;
-    fetchProducts(selectedCategory);  
-    });
 
-    // 全ての商品データを保持する変数（検索機能のために追加）
-    let allProducts = []; 
+    let fullProductList = []; // 全商品を保持
+    let currentCategory = ''; // 現在のカテゴリ
+    let currentSearchTerm = ''; // 現在の検索語
 
-    // --- 検索機能関連の追加 ---
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
 
     searchBtn.addEventListener('click', () => {
-        filterAndDisplayProducts(searchInput.value);
+        currentSearchTerm = searchInput.value;
+        updateFilteredProductView();
     });
 
     searchInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
-            filterAndDisplayProducts(searchInput.value);
+            currentSearchTerm = searchInput.value;
+            updateFilteredProductView();
         }
     });
 
-    // 商品をフィルタリングして表示する関数（検索機能のために追加）
-    function filterAndDisplayProducts(searchTerm) {
-        const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
-        let filteredProducts = [];
+    document.getElementById('category-select').addEventListener('change', function () {
+        currentCategory = this.value;
+        updateFilteredProductView();
+    });
 
-        if (lowerCaseSearchTerm === '') {
-            filteredProducts = allProducts; // 検索語がない場合は全商品を表示
-        } else {
-            // 商品名または説明にキーワードが含まれる商品をフィルタリング
-            filteredProducts = allProducts.filter(product => 
-                product.name.toLowerCase().includes(lowerCaseSearchTerm) ||
-                (product.description && product.description.toLowerCase().includes(lowerCaseSearchTerm))
-            );
+    async function fetchProducts() {
+        try {
+            const response = await fetch(`${API_BASE}/products`);
+            if (!response.ok) throw new Error('商品の取得に失敗しました');
+            const products = await response.json();
+            fullProductList = products;
+            updateFilteredProductView();
+        } catch (error) {
+            console.error('Error:', error);
+            alert('商品の読み込みに失敗しました');
         }
-        displayProducts(filteredProducts);
     }
-   
-    // カート情報の取得と表示
-    updateCartDisplay();
-   
-    // カートボタンクリックイベント
-    document.getElementById('cart-btn').addEventListener('click', function() {
-        updateCartModalContent();
-        cartModal.show();
-    });
-   
-    // 注文手続きボタンクリックイベント
-    document.getElementById('checkout-btn').addEventListener('click', function() {
-        cartModal.hide();
-        checkoutModal.show();
-    });
-   
-    // 注文確定ボタンクリックイベント
-    document.getElementById('confirm-order-btn').addEventListener('click', function() {
-        submitOrder();
-    });
- 
-   
-    // 商品一覧を取得して表示する関数
-    async function fetchProducts(category = null) {
-    try {
-        let url = `${API_BASE}/products`;
-        if (category) {
-            url += `?category=${encodeURIComponent(category)}`;
-        }
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error('商品の取得に失敗しました');
-        }
-        const products = await response.json();
-        
-        // ★ここを追加または修正: 取得した商品を allProducts に格納
-        allProducts = products; 
-        
-        displayProducts(products); // 取得した商品を表示
-    } catch (error) {
-        console.error('Error:', error);
-        alert('商品の読み込みに失敗しました');
+
+    function updateFilteredProductView() {
+        const lowerSearch = currentSearchTerm.toLowerCase().trim();
+
+        let filtered = fullProductList.filter(product => {
+            const matchCategory = currentCategory === '' || product.category === currentCategory;
+            const matchSearch = lowerSearch === '' ||
+                product.name.toLowerCase().includes(lowerSearch) ||
+                (product.description && product.description.toLowerCase().includes(lowerSearch));
+            return matchCategory && matchSearch;
+        });
+
+        displayProducts(filtered);
     }
-    }
-    // 商品一覧を表示する関数
+
     function displayProducts(products) {
         const container = document.getElementById('products-container');
         container.innerHTML = '';
-       
+
         products.forEach(product => {
             const card = document.createElement('div');
             card.className = 'col';
@@ -110,9 +75,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
             container.appendChild(card);
-           
-            // 詳細ボタンのイベント設定
-            card.querySelector('.view-product').addEventListener('click', function() {
+
+            card.querySelector('.view-product').addEventListener('click', function () {
                 fetchProductDetail(product.productId);
             });
         });
@@ -407,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <p>お客様のメールアドレスに注文確認メールをお送りしました。</p>
         `;
     }
-   
- 
+    fetchProducts(); // 商品一覧の取得を開始
+    updateCartDisplay(); // 必要に応じてカート情報も読み込む
 });
  
