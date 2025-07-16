@@ -1,14 +1,15 @@
 package com.example.simplezakka.repository;
 
+import com.example.simplezakka.entity.Category;
 import com.example.simplezakka.entity.Product;
-import jakarta.persistence.PersistenceException; // JPA標準の例外
+import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.dao.DataIntegrityViolationException; // Spring Data JPAの例外
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,19 +18,22 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DataJpaTest // JPAリポジトリテストに特化した設定
+@DataJpaTest
 class ProductRepositoryTest {
 
     @Autowired
-    private TestEntityManager entityManager; // テストデータの準備や永続化の検証に使用
+    private TestEntityManager entityManager;
 
     @Autowired
-    private ProductRepository productRepository; // テスト対象
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     private Product product1;
     private Product product2;
+    private Category testCategory;
 
-    // テストデータ準備用のヘルパーメソッド
     private Product createProduct(String name, int price, int stock) {
         Product product = new Product();
         product.setName(name);
@@ -37,44 +41,43 @@ class ProductRepositoryTest {
         product.setStock(stock);
         product.setDescription(name + "の説明です。");
         product.setImageUrl("/images/" + name.toLowerCase() + ".jpg");
-        // isRecommendedなどは必要に応じて設定
+        product.setCategory(testCategory); 
         return product;
     }
 
     @BeforeEach
     void setUp() {
-        // 各テストメソッド実行前に共通のデータを準備
+        testCategory = new Category();
+        testCategory.setCategoryName("テストカテゴリ");
+        testCategory.setCreatedAt(LocalDateTime.now());
+        testCategory.setUpdatedAt(LocalDateTime.now());
+        entityManager.persist(testCategory);
+
         product1 = createProduct("商品A", 1000, 10);
         product2 = createProduct("商品B", 2000, 5);
-        entityManager.persist(product1); // TestEntityManagerで永続化
+        entityManager.persist(product1);
         entityManager.persist(product2);
-        entityManager.flush(); // DBに即時反映
-        entityManager.clear(); // 永続化コンテキストキャッシュをクリアし、後続のテストがDBから取得するようにする
+        entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
     @DisplayName("商品を正常に保存し、IDで検索できる")
     void saveAndFindById_Success() {
-        // Arrange
         Product newProduct = createProduct("新商品C", 3000, 20);
+        Product savedProduct = productRepository.save(newProduct);
+        entityManager.flush();
+        Integer savedId = savedProduct.getProductId();
+        entityManager.clear();
 
-        // Act
-        Product savedProduct = productRepository.save(newProduct); // リポジトリ経由で保存
-        entityManager.flush(); // DBへ反映
-        Integer savedId = savedProduct.getProductId(); // 生成されたIDを取得
-        entityManager.clear(); // キャッシュクリア
-
-        Optional<Product> foundProductOpt = productRepository.findById(savedId); // 保存したIDで検索
-
-        // Assert
-        assertThat(foundProductOpt).isPresent(); // Optionalが空でない
+        Optional<Product> foundProductOpt = productRepository.findById(savedId);
+        assertThat(foundProductOpt).isPresent();
         Product foundProduct = foundProductOpt.get();
-        assertThat(foundProduct.getProductId()).isEqualTo(savedId); // IDが一致する
-        assertThat(foundProduct.getName()).isEqualTo(newProduct.getName()); // 名前が一致する
-        assertThat(foundProduct.getPrice()).isEqualTo(newProduct.getPrice()); // 価格が一致する
-        assertThat(foundProduct.getStock()).isEqualTo(newProduct.getStock()); // 在庫が一致する
-        assertThat(foundProduct.getCreatedAt()).isNotNull(); // @PrePersist で createdAt が設定されている
-        assertThat(foundProduct.getUpdatedAt()).isEqualTo(foundProduct.getCreatedAt()); // 作成時は updatedAt も createdAt と同じ
+        assertThat(foundProduct.getName()).isEqualTo(newProduct.getName());
+        assertThat(foundProduct.getPrice()).isEqualTo(newProduct.getPrice());
+        assertThat(foundProduct.getStock()).isEqualTo(newProduct.getStock());
+        assertThat(foundProduct.getCreatedAt()).isNotNull();
+        assertThat(foundProduct.getUpdatedAt()).isEqualTo(foundProduct.getCreatedAt());
     }
 
     @Test
@@ -181,7 +184,6 @@ class ProductRepositoryTest {
         // entityManager.findを使っても確認できる
         assertThat(entityManager.find(Product.class, productId)).isNull();
     }
-
 
     // --- decreaseStock のテスト ---
 
@@ -310,7 +312,7 @@ class ProductRepositoryTest {
         .isInstanceOf(DataIntegrityViolationException.class) // Spring Data JPAがラップした例外
         .hasCauseInstanceOf(PersistenceException.class); // JPAレイヤの例外が原因
     }
-    
+
     @Test
     @DisplayName("必須項目(price)がnullで保存しようとすると例外発生")
     void saveProduct_WithNullPrice_ShouldThrowException() {

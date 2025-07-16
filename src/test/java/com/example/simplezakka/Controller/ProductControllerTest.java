@@ -11,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser; 
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
-import java.util.Collections; // 空リスト用
+import java.util.Collections; 
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -22,7 +23,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ProductController.class) // ProductController と関連コンポーネントをテスト
+@WebMvcTest(ProductController.class) 
+@WithMockUser(username = "testuser", roles = {"USER"}) 
 class ProductControllerTest {
 
     @Autowired
@@ -34,7 +36,7 @@ class ProductControllerTest {
     private ProductListItem productListItem1;
     private ProductListItem productListItem2;
     private ProductItem productItem1;
-    private ProductItem productItemWithNulls; // nullフィールドを含む詳細データ
+    private ProductItem productItemWithNulls; 
 
     @BeforeEach
     void setUp() {
@@ -91,14 +93,14 @@ class ProductControllerTest {
         @DisplayName("商品が存在しない場合、空のリストを200 OKで返す")
         void getAllProducts_WhenNoProductsExist_ShouldReturnEmptyList() throws Exception {
             // Arrange
-            when(productService.findAllProducts()).thenReturn(Collections.emptyList()); // 空リストを返すように設定
+            when(productService.findAllProducts()).thenReturn(Collections.emptyList()); 
 
             // Act & Assert
             mockMvc.perform(get("/api/products")
                             .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$", hasSize(0))); // 空の配列であることを確認
+                    .andExpect(jsonPath("$", hasSize(0))); 
 
             verify(productService, times(1)).findAllProducts();
             verifyNoMoreInteractions(productService);
@@ -164,9 +166,9 @@ class ProductControllerTest {
                     .andExpect(jsonPath("$.productId", is(productItemWithNulls.getProductId())))
                     .andExpect(jsonPath("$.name", is(productItemWithNulls.getName())))
                     .andExpect(jsonPath("$.price", is(productItemWithNulls.getPrice())))
-                    .andExpect(jsonPath("$.description", is(nullValue()))) // descriptionがnull
+                    .andExpect(jsonPath("$.description", is(nullValue()))) 
                     .andExpect(jsonPath("$.stock", is(productItemWithNulls.getStock())))
-                    .andExpect(jsonPath("$.imageUrl", is(nullValue()))); // imageUrlがnull
+                    .andExpect(jsonPath("$.imageUrl", is(nullValue()))); 
 
             verify(productService, times(1)).findProductById(productId);
             verifyNoMoreInteractions(productService);
@@ -181,7 +183,7 @@ class ProductControllerTest {
             // Act & Assert
             mockMvc.perform(get("/api/products/{productId}", productId)
                             .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isNotFound()); // ステータスコード404 Not Found
+                    .andExpect(status().isNotFound()); 
 
             verify(productService, times(1)).findProductById(productId);
             verifyNoMoreInteractions(productService);
@@ -191,7 +193,7 @@ class ProductControllerTest {
         @DisplayName("productIdが数値でない場合、500 Internal Server Errorを返す (現在のGlobalExceptionHandlerの実装による)") // DisplayName を変更
         void getProductById_WithInvalidProductIdFormat_ShouldReturnInternalServerError_DueToExceptionHandler() throws Exception { // メソッド名を変更
             // Arrange
-            String invalidProductId = "abc"; // 数値でないパスパラメータ
+            String invalidProductId = "abc"; 
 
             // Act & Assert
             // 現在のGlobalExceptionHandlerは型ミスマッチをRuntimeExceptionとして扱い500を返すため、
