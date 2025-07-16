@@ -1,4 +1,4 @@
-package com.example.simplezakka.entity;
+package com.example.simplezakka.entity;git reset --hard develop
  
 import jakarta.persistence.*;
 import lombok.Data;
