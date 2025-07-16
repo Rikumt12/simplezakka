@@ -1,6 +1,6 @@
 package com.example.simplezakka.controller;
 
-import com.example.simplezakka.dto.product.ProductDetail;
+import com.example.simplezakka.dto.product.ProductItem;
 import com.example.simplezakka.dto.product.ProductListItem;
 import com.example.simplezakka.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,8 +33,8 @@ class ProductControllerTest {
 
     private ProductListItem productListItem1;
     private ProductListItem productListItem2;
-    private ProductDetail productDetail1;
-    private ProductDetail productDetailWithNulls; // nullフィールドを含む詳細データ
+    private ProductItem productItem1;
+    private ProductItem productItemWithNulls; // nullフィールドを含む詳細データ
 
     @BeforeEach
     void setUp() {
@@ -42,18 +42,18 @@ class ProductControllerTest {
         productListItem1 = new ProductListItem(1, "リスト商品1", 100, "/list1.png");
         productListItem2 = new ProductListItem(2, "リスト商品2", 200, "/list2.png");
 
-        productDetail1 = new ProductDetail(1, "詳細商品1", 100, "詳細説明1", 10, "/detail1.png");
-        productDetailWithNulls = new ProductDetail(3, "詳細商品3", 300, null, 5, null); // descriptionとimageUrlがnull
+        productItem1 = new ProductItem(1, "詳細商品1", 100, "詳細説明1", 10, "/Item1.png");
+        productItemWithNulls = new ProductItem(3, "詳細商品3", 300, null, 5, null); // descriptionとimageUrlがnull
 
         // --- Serviceメソッドのデフォルトモック設定 (lenient) ---
         // デフォルトではfindAllProductsは2つのアイテムを返す
         lenient().when(productService.findAllProducts()).thenReturn(Arrays.asList(productListItem1, productListItem2));
-        // デフォルトではfindProductById(1) は productDetail1 を返す
-        lenient().when(productService.findProductById(1)).thenReturn(productDetail1);
+        // デフォルトではfindProductById(1) は productItem1 を返す
+        lenient().when(productService.findProductById(1)).thenReturn(productItem1);
         // デフォルトでは存在しないID(99)ではnullを返す
         lenient().when(productService.findProductById(99)).thenReturn(null);
         // nullフィールドを持つ商品データ
-        lenient().when(productService.findProductById(3)).thenReturn(productDetailWithNulls);
+        lenient().when(productService.findProductById(3)).thenReturn(productItemWithNulls);
     }
 
     // === GET /api/products ===
@@ -128,8 +128,8 @@ class ProductControllerTest {
     class GetProductByIdTests {
 
         @Test
-        @DisplayName("存在するproductIdの場合、商品詳細(ProductDetail)を200 OKで返す")
-        void getProductById_WhenProductExists_ShouldReturnProductDetail() throws Exception {
+        @DisplayName("存在するproductIdの場合、商品詳細(ProductItem)を200 OKで返す")
+        void getProductById_WhenProductExists_ShouldReturnProductItem() throws Exception {
             // Arrange (setUpのデフォルトモックを使用 - ID:1)
             Integer productId = 1;
 
@@ -139,12 +139,12 @@ class ProductControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     // 全フィールドを検証
-                    .andExpect(jsonPath("$.productId", is(productDetail1.getProductId())))
-                    .andExpect(jsonPath("$.name", is(productDetail1.getName())))
-                    .andExpect(jsonPath("$.price", is(productDetail1.getPrice())))
-                    .andExpect(jsonPath("$.description", is(productDetail1.getDescription())))
-                    .andExpect(jsonPath("$.stock", is(productDetail1.getStock())))
-                    .andExpect(jsonPath("$.imageUrl", is(productDetail1.getImageUrl())));
+                    .andExpect(jsonPath("$.productId", is(productItem1.getProductId())))
+                    .andExpect(jsonPath("$.name", is(productItem1.getName())))
+                    .andExpect(jsonPath("$.price", is(productItem1.getPrice())))
+                    .andExpect(jsonPath("$.description", is(productItem1.getDescription())))
+                    .andExpect(jsonPath("$.stock", is(productItem1.getStock())))
+                    .andExpect(jsonPath("$.imageUrl", is(productItem1.getImageUrl())));
 
             verify(productService, times(1)).findProductById(productId);
             verifyNoMoreInteractions(productService);
@@ -152,7 +152,7 @@ class ProductControllerTest {
 
          @Test
         @DisplayName("存在するproductIdで、一部フィールドがnullの商品の場合、nullを含む商品詳細を200 OKで返す")
-        void getProductById_WhenProductExistsWithNullFields_ShouldReturnProductDetailWithNulls() throws Exception {
+        void getProductById_WhenProductExistsWithNullFields_ShouldReturnProductItemWithNulls() throws Exception {
             // Arrange (setUpのデフォルトモックを使用 - ID:3)
             Integer productId = 3;
 
@@ -161,11 +161,11 @@ class ProductControllerTest {
                             .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(jsonPath("$.productId", is(productDetailWithNulls.getProductId())))
-                    .andExpect(jsonPath("$.name", is(productDetailWithNulls.getName())))
-                    .andExpect(jsonPath("$.price", is(productDetailWithNulls.getPrice())))
+                    .andExpect(jsonPath("$.productId", is(productItemWithNulls.getProductId())))
+                    .andExpect(jsonPath("$.name", is(productItemWithNulls.getName())))
+                    .andExpect(jsonPath("$.price", is(productItemWithNulls.getPrice())))
                     .andExpect(jsonPath("$.description", is(nullValue()))) // descriptionがnull
-                    .andExpect(jsonPath("$.stock", is(productDetailWithNulls.getStock())))
+                    .andExpect(jsonPath("$.stock", is(productItemWithNulls.getStock())))
                     .andExpect(jsonPath("$.imageUrl", is(nullValue()))); // imageUrlがnull
 
             verify(productService, times(1)).findProductById(productId);

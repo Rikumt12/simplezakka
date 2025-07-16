@@ -1,6 +1,6 @@
 package com.example.simplezakka.service;
 
-import com.example.simplezakka.dto.product.ProductDetail;
+import com.example.simplezakka.dto.product.ProductItem;
 import com.example.simplezakka.dto.product.ProductListItem;
 import com.example.simplezakka.entity.Product;
 import com.example.simplezakka.repository.ProductRepository;
@@ -132,14 +132,14 @@ class ProductServiceTest {
     // === findProductById のテスト ===
 
     @Test
-    @DisplayName("findProductById: 存在するIDで検索した場合、ProductDetailを返す")
-    void findProductById_WhenProductExists_ShouldReturnProductDetail() {
+    @DisplayName("findProductById: 存在するIDで検索した場合、ProductItemを返す")
+    void findProductById_WhenProductExists_ShouldReturnProductItem() {
         // Arrange
         Integer productId = 1;
         when(productRepository.findById(productId)).thenReturn(Optional.of(product1));
 
         // Act
-        ProductDetail result = productService.findProductById(productId);
+        ProductItem result = productService.findProductById(productId);
 
         // Assert
         assertThat(result).isNotNull();
@@ -164,7 +164,7 @@ class ProductServiceTest {
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
         // Act
-        ProductDetail result = productService.findProductById(productId);
+        ProductItem result = productService.findProductById(productId);
 
         // Assert
         assertThat(result).isNull();
@@ -182,7 +182,7 @@ class ProductServiceTest {
         when(productRepository.findById(productId)).thenReturn(Optional.of(productWithNullFields));
 
         // Act
-        ProductDetail result = productService.findProductById(productId);
+        ProductItem result = productService.findProductById(productId);
 
         // Assert
         assertThat(result).isNotNull();
@@ -211,7 +211,7 @@ class ProductServiceTest {
         // when(productRepository.findById(nullProductId)).thenThrow(new IllegalArgumentException("ID cannot be null"));
 
         // Act
-        ProductDetail result = productService.findProductById(nullProductId);
+        ProductItem result = productService.findProductById(nullProductId);
 
         // Assert
         // Optional.empty() を返すように定義したので、結果は null になるはず

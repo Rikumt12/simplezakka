@@ -6,9 +6,9 @@ import com.example.simplezakka.dto.order.CustomerInfo;
 import com.example.simplezakka.dto.order.OrderRequest;
 import com.example.simplezakka.dto.order.OrderResponse;
 import com.example.simplezakka.entity.Order;
-import com.example.simplezakka.entity.OrderDetail;
+import com.example.simplezakka.entity.OrderItem;
 import com.example.simplezakka.entity.Product;
-import com.example.simplezakka.repository.OrderDetailRepository; // 不要だがモックは用意
+import com.example.simplezakka.repository.OrderItemRepository; // 不要だがモックは用意
 import com.example.simplezakka.repository.OrderRepository;
 import com.example.simplezakka.repository.ProductRepository;
 import jakarta.servlet.http.HttpSession;
@@ -41,7 +41,7 @@ class OrderServiceTest {
     @Mock
     private OrderRepository orderRepository;
     @Mock
-    private OrderDetailRepository orderDetailRepository; // 直接は使わない想定だが、依存性として存在
+    private OrderItemRepository orderItemRepository; // 直接は使わない想定だが、依存性として存在
     @Mock
     private ProductRepository productRepository;
     @Mock
@@ -105,9 +105,9 @@ class OrderServiceTest {
             if (orderToSave.getOrderId() == null) {
                 orderToSave.setOrderId(123);
             }
-            // Orderエンティティの addOrderDetail を使う場合、通常この関連設定は不要
-            // orderToSave.getOrderDetails().forEach(detail ->
-            // detail.setOrder(orderToSave));
+            // Orderエンティティの addOrderItem を使う場合、通常この関連設定は不要
+            // orderToSave.getOrderItems().forEach(item ->
+            // item.setOrder(orderToSave));
             return orderToSave;
         });
         lenient().doNothing().when(cartService).clearCart(any(HttpSession.class));
@@ -146,27 +146,27 @@ class OrderServiceTest {
         assertThat(savedOrder.getStatus()).isEqualTo("PENDING"); // ステータス
         assertThat(savedOrder.getOrderDate()).isNotNull(); // 注文日時 (厳密な比較は難しいのでNotNull)
 
-        // OrderDetailエンティティの内容を検証
-        assertThat(savedOrder.getOrderDetails()).hasSize(2);
-        // 商品1のOrderDetail
-        Optional<OrderDetail> detail1Opt = savedOrder.getOrderDetails().stream()
+        // OrderItemエンティティの内容を検証
+        assertThat(savedOrder.getOrderItems()).hasSize(2);
+        // 商品1のOrderItem
+        Optional<OrderItem> item1Opt = savedOrder.getOrderItems().stream()
                 .filter(d -> d.getProduct().getProductId().equals(1)).findFirst();
-        assertThat(detail1Opt).isPresent();
-        detail1Opt.ifPresent(detail -> {
-            assertThat(detail.getProductName()).isEqualTo(product1.getName());
-            assertThat(detail.getPrice()).isEqualTo(product1.getPrice());
-            assertThat(detail.getQuantity()).isEqualTo(2); // カートの数量
-            assertThat(detail.getOrder()).isEqualTo(savedOrder); // Orderへの参照
+        assertThat(item1Opt).isPresent();
+        item1Opt.ifPresent(item -> {
+            assertThat(item.getProductName()).isEqualTo(product1.getName());
+            assertThat(item.getPrice()).isEqualTo(product1.getPrice());
+            assertThat(item.getQuantity()).isEqualTo(2); // カートの数量
+            assertThat(item.getOrder()).isEqualTo(savedOrder); // Orderへの参照
         });
-        // 商品2のOrderDetail
-        Optional<OrderDetail> detail2Opt = savedOrder.getOrderDetails().stream()
+        // 商品2のOrderItem
+        Optional<OrderItem> item2Opt = savedOrder.getOrderItems().stream()
                 .filter(d -> d.getProduct().getProductId().equals(2)).findFirst();
-        assertThat(detail2Opt).isPresent();
-        detail2Opt.ifPresent(detail -> {
-            assertThat(detail.getProductName()).isEqualTo(product2.getName());
-            assertThat(detail.getPrice()).isEqualTo(product2.getPrice());
-            assertThat(detail.getQuantity()).isEqualTo(1); // カートの数量
-            assertThat(detail.getOrder()).isEqualTo(savedOrder); // Orderへの参照
+        assertThat(item2Opt).isPresent();
+        item2Opt.ifPresent(item -> {
+            assertThat(item.getProductName()).isEqualTo(product2.getName());
+            assertThat(item.getPrice()).isEqualTo(product2.getPrice());
+            assertThat(item.getQuantity()).isEqualTo(1); // カートの数量
+            assertThat(item.getOrder()).isEqualTo(savedOrder); // Orderへの参照
         });
 
         // 2. ProductRepository.decreaseStock が正しい引数で呼ばれたか
@@ -177,7 +177,7 @@ class OrderServiceTest {
         verify(cartService, times(1)).clearCart(session);
 
         // 4. 不要なメソッド呼び出しがないことの確認 (例)
-        verify(orderDetailRepository, never()).save(any()); // OrderDetailRepositoryは直接使わない
+        verify(orderItemRepository, never()).save(any()); // OrderItemRepositoryは直接使わない
     }
 
     @Test
@@ -201,9 +201,9 @@ class OrderServiceTest {
         ArgumentCaptor<Order> orderCaptor = ArgumentCaptor.forClass(Order.class);
         verify(orderRepository).save(orderCaptor.capture());
         Order savedOrder = orderCaptor.getValue();
-        assertThat(savedOrder.getOrderDetails()).hasSize(1);
-        assertThat(savedOrder.getOrderDetails().get(0).getProduct().getProductId()).isEqualTo(1);
-        assertThat(savedOrder.getOrderDetails().get(0).getQuantity()).isEqualTo(3);
+        assertThat(savedOrder.getOrderItems()).hasSize(1);
+        assertThat(savedOrder.getOrderItems().get(0).getProduct().getProductId()).isEqualTo(1);
+        assertThat(savedOrder.getOrderItems().get(0).getQuantity()).isEqualTo(3);
         assertThat(savedOrder.getTotalAmount()).isEqualTo(3000);
 
         verify(productRepository, times(1)).decreaseStock(eq(1), eq(3));

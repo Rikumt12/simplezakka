@@ -1,7 +1,7 @@
 package com.example.simplezakka.repository;
 
 import com.example.simplezakka.entity.Order;
-import com.example.simplezakka.entity.OrderDetail;
+import com.example.simplezakka.entity.OrderItem;
 import com.example.simplezakka.entity.Product;
 import jakarta.persistence.PersistenceException; // 制約違反用
 import org.junit.jupiter.api.BeforeEach;
@@ -28,8 +28,8 @@ class OrderRepositoryTest {
     @Autowired
     private OrderRepository orderRepository; // テスト対象のリポジトリ
 
-    @Autowired // OrderDetailの削除確認用にインジェクト
-    private OrderDetailRepository orderDetailRepository;
+    @Autowired // OrderItemの削除確認用にインジェクト
+    private OrderItemRepository orderItemRepository;
 
     @Autowired // テストデータ準備用にインジェクト
     private ProductRepository productRepository;
@@ -66,30 +66,30 @@ class OrderRepositoryTest {
         order.setShippingPhoneNumber("090-" + customerName.hashCode());
         order.setStatus("PENDING"); // 初期ステータス
 
-        OrderDetail detail1 = new OrderDetail();
-        detail1.setProduct(product1); // 事前に永続化したProductエンティティを設定
-        detail1.setProductName(product1.getName());
-        detail1.setPrice(product1.getPrice());
-        detail1.setQuantity(1);
-        order.addOrderDetail(detail1); // Orderエンティティのヘルパーメソッドで詳細を追加
+        OrderItem item1 = new OrderItem();
+        item1.setProduct(product1); // 事前に永続化したProductエンティティを設定
+        item1.setProductName(product1.getName());
+        item1.setPrice(product1.getPrice());
+        item1.setQuantity(1);
+        order.addOrderItem(item1); // Orderエンティティのヘルパーメソッドで詳細を追加
 
-        OrderDetail detail2 = new OrderDetail();
-        detail2.setProduct(product2);
-        detail2.setProductName(product2.getName());
-        detail2.setPrice(product2.getPrice());
-        detail2.setQuantity(1);
-        order.addOrderDetail(detail2);
+        OrderItem item2 = new OrderItem();
+        item2.setProduct(product2);
+        item2.setProductName(product2.getName());
+        item2.setPrice(product2.getPrice());
+        item2.setQuantity(1);
+        order.addOrderItem(item2);
         return order;
     }
 
     @Test
     @DisplayName("注文と注文詳細を正常に保存できる")
-    void saveOrderWithDetails_Success() {
+    void saveOrderWithItems_Success() {
         // Arrange
         Order order = createSampleOrder("顧客1");
 
         // Act
-        Order savedOrder = orderRepository.save(order); // Orderを保存 (CascadeType.ALLによりOrderDetailも保存されるはず)
+        Order savedOrder = orderRepository.save(order); // Orderを保存 (CascadeType.ALLによりOrderItemも保存されるはず)
         entityManager.flush(); // DBへ反映
         entityManager.clear(); // 永続化コンテキストキャッシュをクリアし、DBからの取得を確実にする
 
@@ -100,17 +100,17 @@ class OrderRepositoryTest {
         assertThat(foundOrder).isNotNull(); // Orderが取得できる
         assertThat(foundOrder.getOrderId()).isNotNull(); // IDが払い出されている
         assertThat(foundOrder.getCustomerName()).isEqualTo(order.getCustomerName()); // 顧客名が正しい
-        assertThat(foundOrder.getOrderDetails()).hasSize(2); // 注文詳細が2件含まれている
+        assertThat(foundOrder.getOrderItems()).hasSize(2); // 注文詳細が2件含まれている
         // 注文詳細の内容も確認
-        assertThat(foundOrder.getOrderDetails().get(0).getProductName()).isEqualTo(product1.getName());
-        assertThat(foundOrder.getOrderDetails().get(0).getQuantity()).isEqualTo(1);
-        assertThat(foundOrder.getOrderDetails().get(1).getProductName()).isEqualTo(product2.getName());
-        assertThat(foundOrder.getOrderDetails().get(1).getQuantity()).isEqualTo(1);
+        assertThat(foundOrder.getOrderItems().get(0).getProductName()).isEqualTo(product1.getName());
+        assertThat(foundOrder.getOrderItems().get(0).getQuantity()).isEqualTo(1);
+        assertThat(foundOrder.getOrderItems().get(1).getProductName()).isEqualTo(product2.getName());
+        assertThat(foundOrder.getOrderItems().get(1).getQuantity()).isEqualTo(1);
 
-        // 関連するOrderDetailも正しく永続化されていることを確認 (CascadeType.ALLの検証)
-        OrderDetail foundDetail1 = entityManager.find(OrderDetail.class, foundOrder.getOrderDetails().get(0).getOrderDetailId());
-        assertThat(foundDetail1).isNotNull();
-        assertThat(foundDetail1.getOrder().getOrderId()).isEqualTo(foundOrder.getOrderId()); // Orderへの関連が設定されている
+        // 関連するOrderItemも正しく永続化されていることを確認 (CascadeType.ALLの検証)
+        OrderItem foundItem1 = entityManager.find(OrderItem.class, foundOrder.getOrderItems().get(0).getOrderItemId());
+        assertThat(foundItem1).isNotNull();
+        assertThat(foundItem1.getOrder().getOrderId()).isEqualTo(foundOrder.getOrderId()); // Orderへの関連が設定されている
     }
 
     @Test
@@ -129,8 +129,8 @@ class OrderRepositoryTest {
         Order foundOrder = foundOrderOpt.get();
         assertThat(foundOrder.getOrderId()).isEqualTo(savedOrder.getOrderId());
         assertThat(foundOrder.getCustomerName()).isEqualTo(order1.getCustomerName());
-        // 関連エンティティ(OrderDetails)が取得できるかも確認（FetchTypeに依存するが、@DataJpaTest環境では通常取得可能）
-        assertThat(foundOrder.getOrderDetails()).hasSize(2);
+        // 関連エンティティ(OrderItems)が取得できるかも確認（FetchTypeに依存するが、@DataJpaTest環境では通常取得可能）
+        assertThat(foundOrder.getOrderItems()).hasSize(2);
     }
 
     @Test
@@ -212,22 +212,22 @@ class OrderRepositoryTest {
 
     @Test
     @DisplayName("IDを指定して注文を削除できる (関連する詳細も削除される)")
-    void deleteById_ShouldRemoveOrderAndDetails() {
+    void deleteById_ShouldRemoveOrderAndItems() {
         // Arrange
         Order order = createSampleOrder("削除対象顧客");
         Order savedOrder = entityManager.persistFlushFind(order);
         Integer orderId = savedOrder.getOrderId();
-        // 削除前のOrderDetailのIDを取得 (削除確認用)
-        List<Integer> detailIds = savedOrder.getOrderDetails().stream()
-                                           .map(OrderDetail::getOrderDetailId)
+        // 削除前のOrderItemのIDを取得 (削除確認用)
+        List<Integer> itemIds = savedOrder.getOrderItems().stream()
+                                           .map(OrderItem::getOrderItemId)
                                            .toList();
-        assertThat(detailIds).isNotEmpty(); // 詳細が存在することを前提とする
+        assertThat(itemIds).isNotEmpty(); // 詳細が存在することを前提とする
         entityManager.clear();
 
         // Act
         // 削除前に存在することを確認
         assertThat(orderRepository.findById(orderId)).isPresent();
-        assertThat(orderDetailRepository.findById(detailIds.get(0))).isPresent();
+        assertThat(orderItemRepository.findById(itemIds.get(0))).isPresent();
 
         orderRepository.deleteById(orderId); // IDで削除
         entityManager.flush(); // DBに反映
@@ -236,11 +236,11 @@ class OrderRepositoryTest {
         // Assert
         // Orderが削除されたことを確認
         assertThat(orderRepository.findById(orderId)).isNotPresent();
-        // 関連するOrderDetailも削除されていることを確認 (Orderエンティティの CascadeType.ALL と orphanRemoval = true による)
-        for (Integer detailId : detailIds) {
-             assertThat(orderDetailRepository.findById(detailId)).isNotPresent();
+        // 関連するOrderItemも削除されていることを確認 (Orderエンティティの CascadeType.ALL と orphanRemoval = true による)
+        for (Integer itemId : itemIds) {
+             assertThat(orderItemRepository.findById(itemId)).isNotPresent();
              // entityManager.findでも確認可能
-             // assertThat(entityManager.find(OrderDetail.class, detailId)).isNull();
+             // assertThat(entityManager.find(OrderItem.class, itemId)).isNull();
         }
     }
 
