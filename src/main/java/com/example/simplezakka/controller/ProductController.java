@@ -1,6 +1,6 @@
 package com.example.simplezakka.controller;
  
-import com.example.simplezakka.dto.product.ProductDetail;
+import com.example.simplezakka.dto.product.ProductItem;
 import com.example.simplezakka.dto.product.ProductListItem;
 import com.example.simplezakka.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +41,8 @@ public class ProductController {
     }
  
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductDetail> getProductById(@PathVariable Integer productId) {
-        ProductDetail product = productService.findProductById(productId);
+    public ResponseEntity<ProductItem> getProductById(@PathVariable Integer productId) {
+        ProductItem product = productService.findProductById(productId);
         if (product == null) {
             return ResponseEntity.notFound().build();
         }

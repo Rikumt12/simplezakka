@@ -1,6 +1,6 @@
 package com.example.simplezakka.service;
  
-import com.example.simplezakka.dto.product.ProductDetail;
+import com.example.simplezakka.dto.product.ProductItem;
 import com.example.simplezakka.dto.product.ProductListItem;
 import com.example.simplezakka.entity.Product;
 import com.example.simplezakka.exception.ResourceNotFoundException;
@@ -29,11 +29,11 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public ProductDetail findProductById(Integer id) {
+    public ProductItem findProductById(Integer id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("商品が見つかりませんでした (ID: " + id + ")"));
  
-        return new ProductDetail(
+        return new ProductItem(
                 product.getProductId(),
                 product.getName(),
                 product.getPrice(),

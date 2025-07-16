@@ -6,9 +6,9 @@ import com.example.simplezakka.dto.order.CustomerInfo;
 import com.example.simplezakka.dto.order.OrderRequest;
 import com.example.simplezakka.dto.order.OrderResponse;
 import com.example.simplezakka.entity.Order;
-import com.example.simplezakka.entity.OrderDetail;
+import com.example.simplezakka.entity.OrderItem;
 import com.example.simplezakka.entity.Product;
-import com.example.simplezakka.repository.OrderDetailRepository;
+import com.example.simplezakka.repository.OrderItemRepository;
 import com.example.simplezakka.repository.OrderRepository;
 import com.example.simplezakka.repository.ProductRepository;
 import jakarta.servlet.http.HttpSession;
@@ -23,18 +23,18 @@ import java.util.Optional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderDetailRepository orderDetailRepository;
+    private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository;
     private final CartService cartService;
 
     @Autowired
     public OrderService(
             OrderRepository orderRepository,
-            OrderDetailRepository orderDetailRepository,
+            OrderItemRepository orderItemRepository,
             ProductRepository productRepository,
             CartService cartService) {
         this.orderRepository = orderRepository;
-        this.orderDetailRepository = orderDetailRepository;
+        this.orderItemRepository = orderItemRepository;
         this.productRepository = productRepository;
         this.cartService = cartService;
     }
@@ -68,13 +68,13 @@ public class OrderService {
                 () -> new IllegalStateException("在庫確認後に商品が見つかりません: " + cartItem.getName())
             );
 
-            OrderDetail orderDetail = new OrderDetail();
-            orderDetail.setProduct(product);
-            orderDetail.setProductName(product.getName());
-            orderDetail.setPrice(product.getPrice());
-            orderDetail.setQuantity(cartItem.getQuantity());
+            OrderItem orderItem = new OrderItem();
+            orderItem.setProduct(product);
+            orderItem.setProductName(product.getName());
+            orderItem.setPrice(product.getPrice());
+            orderItem.setQuantity(cartItem.getQuantity());
 
-            order.addOrderDetail(orderDetail);
+            order.addOrderItem(orderItem);
 
           
             int updatedRows = productRepository.decreaseStock(product.getProductId(), cartItem.getQuantity());
