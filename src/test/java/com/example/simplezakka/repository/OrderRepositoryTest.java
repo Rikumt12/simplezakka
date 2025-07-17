@@ -1,21 +1,31 @@
 package com.example.simplezakka.repository;
 
+<<<<<<< HEAD
 import com.example.simplezakka.entity.Order;
 import com.example.simplezakka.entity.OrderItem;
 import com.example.simplezakka.entity.Product;
 import jakarta.persistence.PersistenceException; // 制約違反用
+=======
+import com.example.simplezakka.entity.*;
+import jakarta.persistence.PersistenceException;
+>>>>>>> origin/develop_test
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+<<<<<<< HEAD
 import org.springframework.dao.DataIntegrityViolationException; // Spring Data JPAの例外
+=======
+import org.springframework.dao.DataIntegrityViolationException;
+>>>>>>> origin/develop_test
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+<<<<<<< HEAD
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -40,16 +50,59 @@ class OrderRepositoryTest {
     // 各テストメソッド実行前に共通の商品データを準備
     @BeforeEach
     void setUp() {
+=======
+import static org.assertj.core.api.Assertions.*;
+
+@DataJpaTest
+class OrderRepositoryTest {
+
+    @Autowired
+    private TestEntityManager entityManager;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    private Product product1;
+    private Product product2;
+
+    @BeforeEach
+    void setUp() {
+        // カテゴリ作成（必須のため）
+        Category testCategory = new Category();
+        testCategory.setCategoryName("テストカテゴリ");
+        testCategory.setCreatedAt(LocalDateTime.now());
+        testCategory.setUpdatedAt(LocalDateTime.now());
+        entityManager.persist(testCategory);
+
+        // 商品1
+>>>>>>> origin/develop_test
         product1 = new Product();
         product1.setName("商品A");
         product1.setPrice(1000);
         product1.setStock(10);
+<<<<<<< HEAD
         entityManager.persist(product1); // TestEntityManagerで永続化
 
+=======
+        product1.setCategory(testCategory);  // ← 追加
+        entityManager.persist(product1);
+
+        // 商品2
+>>>>>>> origin/develop_test
         product2 = new Product();
         product2.setName("商品B");
         product2.setPrice(2000);
         product2.setStock(5);
+<<<<<<< HEAD
         entityManager.persist(product2);
 
         entityManager.flush(); // DBに即時反映させ、IDなどを確定させる
@@ -60,10 +113,23 @@ class OrderRepositoryTest {
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
         order.setTotalAmount(3000); // (1000*1 + 2000*1)
+=======
+        product2.setCategory(testCategory);  // ← 追加
+        entityManager.persist(product2);
+
+        entityManager.flush();
+    }
+
+    private Order createSampleOrder(String customerName) {
+        Order order = new Order();
+        order.setOrderDate(LocalDateTime.now());
+        order.setTotalAmount(3000);
+>>>>>>> origin/develop_test
         order.setCustomerName(customerName);
         order.setCustomerEmail(customerName.toLowerCase() + "@example.com");
         order.setShippingAddress("住所 " + customerName);
         order.setShippingPhoneNumber("090-" + customerName.hashCode());
+<<<<<<< HEAD
         order.setStatus("PENDING"); // 初期ステータス
 
         OrderItem item1 = new OrderItem();
@@ -72,6 +138,16 @@ class OrderRepositoryTest {
         item1.setPrice(product1.getPrice());
         item1.setQuantity(1);
         order.addOrderItem(item1); // Orderエンティティのヘルパーメソッドで詳細を追加
+=======
+        order.setStatus("PENDING");
+
+        OrderItem item1 = new OrderItem();
+        item1.setProduct(product1);
+        item1.setProductName(product1.getName());
+        item1.setPrice(product1.getPrice());
+        item1.setQuantity(1);
+        order.addOrderItem(item1);
+>>>>>>> origin/develop_test
 
         OrderItem item2 = new OrderItem();
         item2.setProduct(product2);
@@ -79,12 +155,17 @@ class OrderRepositoryTest {
         item2.setPrice(product2.getPrice());
         item2.setQuantity(1);
         order.addOrderItem(item2);
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/develop_test
         return order;
     }
 
     @Test
     @DisplayName("注文と注文詳細を正常に保存できる")
     void saveOrderWithItems_Success() {
+<<<<<<< HEAD
         // Arrange
         Order order = createSampleOrder("顧客1");
 
@@ -111,6 +192,17 @@ class OrderRepositoryTest {
         OrderItem foundItem1 = entityManager.find(OrderItem.class, foundOrder.getOrderItems().get(0).getOrderItemId());
         assertThat(foundItem1).isNotNull();
         assertThat(foundItem1.getOrder().getOrderId()).isEqualTo(foundOrder.getOrderId()); // Orderへの関連が設定されている
+=======
+        Order order = createSampleOrder("顧客1");
+        Order savedOrder = orderRepository.save(order);
+        entityManager.flush();
+        entityManager.clear();
+
+        Order foundOrder = entityManager.find(Order.class, savedOrder.getOrderId());
+
+        assertThat(foundOrder).isNotNull();
+        assertThat(foundOrder.getOrderItems()).hasSize(2);
+>>>>>>> origin/develop_test
     }
 
     @Test
@@ -209,7 +301,10 @@ class OrderRepositoryTest {
         assertThat(updatedOrder.getUpdatedAt()).isAfter(initialUpdatedAt); // @PreUpdateによりupdatedAtが更新されているはず
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/develop_test
     @Test
     @DisplayName("IDを指定して注文を削除できる (関連する詳細も削除される)")
     void deleteById_ShouldRemoveOrderAndItems() {
@@ -244,7 +339,10 @@ class OrderRepositoryTest {
         }
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/develop_test
     @Test
     @DisplayName("必須項目nullで保存しようとするとDataIntegrityViolationExceptionが発生する")
     void saveOrder_WithNullRequiredField_ShouldThrowException() {
@@ -262,4 +360,9 @@ class OrderRepositoryTest {
         .hasCauseInstanceOf(PersistenceException.class); // JPAレイヤーの例外が原因
         // .hasMessageContaining("NULL not allowed for column \"CUSTOMER_NAME\""); // DB依存のエラーメッセージ確認は脆い場合がある
     }
+<<<<<<< HEAD
 }
+=======
+
+}
+>>>>>>> origin/develop_test
