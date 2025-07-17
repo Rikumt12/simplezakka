@@ -41,8 +41,8 @@ class ProductControllerTest {
     @BeforeEach
     void setUp() {
         // --- テストデータ準備 ---
-        productListItem1 = new ProductListItem(1, "リスト商品1", 100, "/list1.png");
-        productListItem2 = new ProductListItem(2, "リスト商品2", 200, "/list2.png");
+        productListItem1 = new ProductListItem(1, "リスト商品1", 100, "/list1.png",5);
+        productListItem2 = new ProductListItem(2, "リスト商品2", 200, "/list2.png",5);
 
         productItem1 = new ProductItem(1, "詳細商品1", 100, "詳細説明1", 10, "/Item1.png");
         productItemWithNulls = new ProductItem(3, "詳細商品3", 300, null, 5, null); // descriptionとimageUrlがnull
