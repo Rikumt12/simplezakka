@@ -12,10 +12,5 @@ public class ProductListItem {
     private String name;
     private Integer price;
     private String imageUrl;
-<<<<<<< HEAD
     private Integer stock; 
 }
-=======
-    private int stock;
-}
->>>>>>> main

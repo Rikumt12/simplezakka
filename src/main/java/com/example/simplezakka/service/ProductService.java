@@ -54,7 +54,6 @@ public class ProductService {
 
     // カテゴリー名で商品を検索
     public List<ProductListItem> findProductsByCategoryName(String categoryName) {
-<<<<<<< HEAD
         return productRepository.findByCategory_CategoryName(categoryName).stream()
                 .map(p -> new ProductListItem(
                         p.getProductId(),
@@ -64,16 +63,5 @@ public class ProductService {
                         p.getStock()
                 ))
                 .collect(Collectors.toList());
-=======
-    return productRepository.findByCategory_CategoryName(categoryName).stream()
-            .map(p -> new ProductListItem(
-                    p.getProductId(),
-                    p.getName(),
-                    p.getPrice(),
-                    p.getImageUrl(),
-                    p.getStock()
-            ))
-            .collect(Collectors.toList());
->>>>>>> main
     }
 }
