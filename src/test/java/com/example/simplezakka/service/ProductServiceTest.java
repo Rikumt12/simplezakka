@@ -13,12 +13,20 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+<<<<<<< HEAD
+import java.util.Collections; // 空のリスト用
+=======
 import java.util.Collections; 
+>>>>>>> origin/develop_test
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+<<<<<<< HEAD
+import static org.assertj.core.api.Assertions.tuple; // tupleを使った検証用
+=======
 import static org.assertj.core.api.Assertions.tuple; 
+>>>>>>> origin/develop_test
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,7 +40,11 @@ class ProductServiceTest {
 
     private Product product1;
     private Product product2;
+<<<<<<< HEAD
+    private Product productWithNullFields; // nullフィールドを持つテストデータ
+=======
     private Product productWithNullFields; 
+>>>>>>> origin/develop_test
 
     @BeforeEach
     void setUp() {
@@ -43,7 +55,11 @@ class ProductServiceTest {
         product1.setImageUrl("/img1.png");
         product1.setDescription("説明1");
         product1.setStock(10);
+<<<<<<< HEAD
+        // createdAt, updatedAt はエンティティ側で自動設定される想定
+=======
     
+>>>>>>> origin/develop_test
 
         product2 = new Product();
         product2.setProductId(2);
@@ -58,8 +74,13 @@ class ProductServiceTest {
         productWithNullFields.setName("商品3（Nullあり）");
         productWithNullFields.setPrice(300);
         productWithNullFields.setStock(8);
+<<<<<<< HEAD
+        productWithNullFields.setDescription(null); // descriptionがnull
+        productWithNullFields.setImageUrl(null);    // imageUrlがnull
+=======
         productWithNullFields.setDescription(null); 
         productWithNullFields.setImageUrl(null);   
+>>>>>>> origin/develop_test
     }
 
     // === findAllProducts のテスト ===
@@ -190,8 +211,13 @@ class ProductServiceTest {
         assertThat(result.getName()).isEqualTo(productWithNullFields.getName());
         assertThat(result.getPrice()).isEqualTo(productWithNullFields.getPrice());
         assertThat(result.getStock()).isEqualTo(productWithNullFields.getStock());
+<<<<<<< HEAD
+        assertThat(result.getDescription()).isNull(); // descriptionがnullであることを確認
+        assertThat(result.getImageUrl()).isNull();    // imageUrlがnullであることを確認
+=======
         assertThat(result.getDescription()).isNull(); 
         assertThat(result.getImageUrl()).isNull();    
+>>>>>>> origin/develop_test
 
         // Verify
         verify(productRepository, times(1)).findById(productId);

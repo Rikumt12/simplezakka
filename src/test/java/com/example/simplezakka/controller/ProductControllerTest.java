@@ -11,11 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+<<<<<<< HEAD
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Arrays;
+import java.util.Collections; // 空リスト用
+=======
 import org.springframework.security.test.context.support.WithMockUser; 
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.Collections; 
+>>>>>>> origin/develop_test
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -23,8 +30,12 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+<<<<<<< HEAD
+@WebMvcTest(ProductController.class) // ProductController と関連コンポーネントをテスト
+=======
 @WebMvcTest(ProductController.class) 
 @WithMockUser(username = "testuser", roles = {"USER"}) 
+>>>>>>> origin/develop_test
 class ProductControllerTest {
 
     @Autowired
@@ -36,7 +47,11 @@ class ProductControllerTest {
     private ProductListItem productListItem1;
     private ProductListItem productListItem2;
     private ProductItem productItem1;
+<<<<<<< HEAD
+    private ProductItem productItemWithNulls; // nullフィールドを含む詳細データ
+=======
     private ProductItem productItemWithNulls; 
+>>>>>>> origin/develop_test
 
     @BeforeEach
     void setUp() {
@@ -93,14 +108,22 @@ class ProductControllerTest {
         @DisplayName("商品が存在しない場合、空のリストを200 OKで返す")
         void getAllProducts_WhenNoProductsExist_ShouldReturnEmptyList() throws Exception {
             // Arrange
+<<<<<<< HEAD
+            when(productService.findAllProducts()).thenReturn(Collections.emptyList()); // 空リストを返すように設定
+=======
             when(productService.findAllProducts()).thenReturn(Collections.emptyList()); 
+>>>>>>> origin/develop_test
 
             // Act & Assert
             mockMvc.perform(get("/api/products")
                             .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+<<<<<<< HEAD
+                    .andExpect(jsonPath("$", hasSize(0))); // 空の配列であることを確認
+=======
                     .andExpect(jsonPath("$", hasSize(0))); 
+>>>>>>> origin/develop_test
 
             verify(productService, times(1)).findAllProducts();
             verifyNoMoreInteractions(productService);
@@ -166,9 +189,15 @@ class ProductControllerTest {
                     .andExpect(jsonPath("$.productId", is(productItemWithNulls.getProductId())))
                     .andExpect(jsonPath("$.name", is(productItemWithNulls.getName())))
                     .andExpect(jsonPath("$.price", is(productItemWithNulls.getPrice())))
+<<<<<<< HEAD
+                    .andExpect(jsonPath("$.description", is(nullValue()))) // descriptionがnull
+                    .andExpect(jsonPath("$.stock", is(productItemWithNulls.getStock())))
+                    .andExpect(jsonPath("$.imageUrl", is(nullValue()))); // imageUrlがnull
+=======
                     .andExpect(jsonPath("$.description", is(nullValue()))) 
                     .andExpect(jsonPath("$.stock", is(productItemWithNulls.getStock())))
                     .andExpect(jsonPath("$.imageUrl", is(nullValue()))); 
+>>>>>>> origin/develop_test
 
             verify(productService, times(1)).findProductById(productId);
             verifyNoMoreInteractions(productService);
@@ -183,7 +212,11 @@ class ProductControllerTest {
             // Act & Assert
             mockMvc.perform(get("/api/products/{productId}", productId)
                             .accept(MediaType.APPLICATION_JSON))
+<<<<<<< HEAD
+                    .andExpect(status().isNotFound()); // ステータスコード404 Not Found
+=======
                     .andExpect(status().isNotFound()); 
+>>>>>>> origin/develop_test
 
             verify(productService, times(1)).findProductById(productId);
             verifyNoMoreInteractions(productService);
@@ -193,7 +226,11 @@ class ProductControllerTest {
         @DisplayName("productIdが数値でない場合、500 Internal Server Errorを返す (現在のGlobalExceptionHandlerの実装による)") // DisplayName を変更
         void getProductById_WithInvalidProductIdFormat_ShouldReturnInternalServerError_DueToExceptionHandler() throws Exception { // メソッド名を変更
             // Arrange
+<<<<<<< HEAD
+            String invalidProductId = "abc"; // 数値でないパスパラメータ
+=======
             String invalidProductId = "abc"; 
+>>>>>>> origin/develop_test
 
             // Act & Assert
             // 現在のGlobalExceptionHandlerは型ミスマッチをRuntimeExceptionとして扱い500を返すため、
@@ -228,4 +265,8 @@ class ProductControllerTest {
             verifyNoMoreInteractions(productService);
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/develop_test
