@@ -54,6 +54,7 @@
             <th>画像</th>
             <th>名前</th>
             <th>価格</th>
+            <th>在庫</th> <!-- 追加 -->
             <th>操作</th>
         </tr>
     </thead>
@@ -63,6 +64,7 @@
             <td><img th:src="@{${product.imageUrl}}" alt="画像"></td>
             <td th:text="${product.name}">商品名</td>
             <td th:text="'¥' + ${product.price}">1000</td>
+            <td th:text="${product.stock}">10</td> <!-- 追加 -->
             <td class="actions">
                 <a href="#" onclick="return showNotImplementedAlert();">編集</a>
                 <form onsubmit="return showNotImplementedAlert();" style="display:inline;">
@@ -72,6 +74,7 @@
         </tr>
     </tbody>
 </table>
+
 
 <script>
 function showNotImplementedAlert() {

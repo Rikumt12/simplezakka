@@ -24,7 +24,8 @@ public class ProductService {
                         p.getProductId(),
                         p.getName(),
                         p.getPrice(),
-                        p.getImageUrl()
+                        p.getImageUrl(),
+                        p.getStock()
                 ))
                 .collect(Collectors.toList());
     }
@@ -54,7 +55,8 @@ public class ProductService {
                     p.getProductId(),
                     p.getName(),
                     p.getPrice(),
-                    p.getImageUrl()
+                    p.getImageUrl(),
+                    p.getStock()
             ))
             .collect(Collectors.toList());
     }
