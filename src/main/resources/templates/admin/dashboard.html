@@ -54,7 +54,11 @@
             <th>画像</th>
             <th>名前</th>
             <th>価格</th>
+<<<<<<< HEAD
             <th>在庫</th>
+=======
+            <th>在庫</th> <!-- 追加 -->
+>>>>>>> main
             <th>操作</th>
         </tr>
     </thead>
@@ -64,7 +68,11 @@
             <td><img th:src="@{${product.imageUrl}}" alt="画像"></td>
             <td th:text="${product.name}">商品名</td>
             <td th:text="'¥' + ${product.price}">1000</td>
+<<<<<<< HEAD
             <td th:text="${product.stock}">10</td> 
+=======
+            <td th:text="${product.stock}">10</td> <!-- 追加 -->
+>>>>>>> main
             <td class="actions">
                 <a href="#" onclick="return showNotImplementedAlert();">編集</a>
                 <form onsubmit="return showNotImplementedAlert();" style="display:inline;">
