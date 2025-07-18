@@ -62,7 +62,6 @@ class OrderItemRepositoryTest {
         order.setOrderDate(LocalDateTime.now());
         order.setTotalAmount(0); // 仮の値
         order.setCustomerName("テスト太郎");
-        order.setCustomerEmail("test@example.com");
         order.setShippingAddress("東京都テスト区1-2-3");
         order.setShippingPhoneNumber("080-1234-5678");
         order.setStatus("準備中");
