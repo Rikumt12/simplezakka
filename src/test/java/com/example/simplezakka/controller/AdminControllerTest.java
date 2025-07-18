@@ -1,8 +1,5 @@
 package com.example.simplezakka.controller;
-<<<<<<< HEAD
 
-=======
->>>>>>> 7ae4950759345b08befa219f8b1230189347de37
 import com.example.simplezakka.entity.Admin;
 import com.example.simplezakka.service.AdminService;
 import com.example.simplezakka.service.ProductService;
@@ -58,7 +55,6 @@ public class AdminControllerTest {
     @Test
     void showLogin_WithSession_RedirectDashboard() throws Exception {
         session.setAttribute("admin", new Admin());
->>>>>>> 7ae4950759345b08befa219f8b1230189347de37
         mockMvc.perform(get("/admin/login").session(session))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/dashboard"));
@@ -142,8 +138,4 @@ public class AdminControllerTest {
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.error").value("ログイン処理中にエラーが発生しました"));
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> 7ae4950759345b08befa219f8b1230189347de37
 }
