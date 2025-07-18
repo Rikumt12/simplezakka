@@ -1,4 +1,3 @@
-
 package com.example.simplezakka.service;
 import com.example.simplezakka.entity.Admin;
 import com.example.simplezakka.repository.AdminRepository;
@@ -85,14 +84,17 @@ class AdminServiceTest {
         assertNull(result);
     }
     @Test
-    void changePassword_正常系_パスワードが更新され保存されること() {
-        Admin admin = new Admin();
-        String newPassword = "newPassword123";
-  
-        Admin result = adminService.changePassword(admin, newPassword);
-        assertTrue(passwordEncoder.matches(newPassword, result.getPassword()));
-        verify(adminRepository).save(admin);
-    }
+void changePassword_正常系_パスワードが更新され保存されること() {
+    Admin admin = new Admin();
+    String newPassword = "newPassword123";
+
+    when(adminRepository.save(admin)).thenReturn(admin);
+
+    Admin result = adminService.changePassword(admin, newPassword);
+    assertTrue(passwordEncoder.matches(newPassword, result.getPassword()));
+    verify(adminRepository).save(admin);
+}
+
     @Test
     void findByUsername_正常系_ユーザーが取得できること() {
         Admin admin = new Admin();
