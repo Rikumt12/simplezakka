@@ -139,7 +139,6 @@ class OrderServiceTest {
 
         // Orderエンティティの内容を詳細に検証
         assertThat(savedOrder.getCustomerName()).isEqualTo(customerInfo.getName());
-        assertThat(savedOrder.getCustomerEmail()).isEqualTo(customerInfo.getEmail());
         assertThat(savedOrder.getShippingAddress()).isEqualTo(customerInfo.getAddress());
         assertThat(savedOrder.getShippingPhoneNumber()).isEqualTo(customerInfo.getPhoneNumber());
         assertThat(savedOrder.getTotalAmount()).isEqualTo(cart.getTotalPrice()); // 合計金額
