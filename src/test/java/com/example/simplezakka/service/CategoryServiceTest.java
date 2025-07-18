@@ -31,7 +31,7 @@ class CategoryServiceTest {
         List<Category> result = categoryService.getAllCategories();
 
         assertThat(result).hasSize(2);
-        assertThat(result.get(0).getName()).isEqualTo("キッチン");
+        assertThat(result.get(0).getCategoryName()).isEqualTo("キッチン");
         verify(categoryRepository, times(1)).findAll();
     }
 

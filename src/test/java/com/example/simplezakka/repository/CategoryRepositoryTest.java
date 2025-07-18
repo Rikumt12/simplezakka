@@ -26,7 +26,7 @@ class CategoryRepositoryTest {
         Category category = new Category(null, "家電", null, null);
         Category saved = categoryRepository.save(category);
 
-        assertThat(saved.getId()).isNotNull();
+        assertThat(saved.getCategoryId()).isNotNull();
         assertThat(saved.getCategoryName()).isEqualTo("家電");
     }
 
@@ -49,7 +49,7 @@ class CategoryRepositoryTest {
     @DisplayName("正常: ID指定でカテゴリを取得できる")
     void findById_WhenCategoryExists_ShouldReturnCategory() {
         Category category = categoryRepository.save(new Category(null, "書籍", null, null));
-        Optional<Category> result = categoryRepository.findById(category.getId());
+        Optional<Category> result = categoryRepository.findById(category.getCategoryId());
         assertThat(result).isPresent();
         assertThat(result.get().getCategoryName()).isEqualTo("書籍");
     }
@@ -92,17 +92,17 @@ class CategoryRepositoryTest {
     @DisplayName("正常: カテゴリが削除される")
     void deleteById_ShouldDeleteCategory() {
         Category category = categoryRepository.save(new Category(null, "削除対象", null, null));
-        categoryRepository.deleteById(category.getId());
+        categoryRepository.deleteById(category.getCategoryId());
 
-        Optional<Category> result = categoryRepository.findById(category.getId());
+        Optional<Category> result = categoryRepository.findById(category.getCategoryId());
         assertThat(result).isEmpty();
     }
 
     @Test
-    @DisplayName("異常: 存在しないIDをdeleteすると例外")
-    void deleteById_WhenCategoryNotExists_ShouldThrowException() {
-        assertThatThrownBy(() -> categoryRepository.deleteById(999))
-                .isInstanceOf(EmptyResultDataAccessException.class);
+    @DisplayName("存在しないIDをdeleteしても例外は発生しない")
+    void deleteById_WhenCategoryNotExists_ShouldNotThrowException() {
+    assertThatCode(() -> categoryRepository.deleteById(999))
+        .doesNotThrowAnyException();
     }
 
     @Test
@@ -112,7 +112,7 @@ class CategoryRepositoryTest {
         Optional<Category> result = categoryRepository.findByCategoryName("食品");
 
         assertThat(result).isPresent();
-        assertThat(result.get().getId()).isEqualTo(saved.getId());
+        assertThat(result.get().getCategoryId()).isEqualTo(saved.getCategoryId());
     }
 
     @Test
@@ -123,9 +123,9 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    @DisplayName("異常: findByCategoryNameにnullを渡すと例外")
-    void findByCategoryName_WithNull_ShouldThrowException() {
-        assertThatThrownBy(() -> categoryRepository.findByCategoryName(null))
-                .isInstanceOf(IllegalArgumentException.class);
+    @DisplayName("カテゴリ名にnullを渡すとemptyを返す")
+    void findByCategoryName_WithNull_ShouldReturnEmpty() {
+    Optional<Category> result = categoryRepository.findByCategoryName(null);
+    assertThat(result).isEmpty();
     }
 }

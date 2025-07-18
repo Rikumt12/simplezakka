@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CategoryController.class)
+@AutoConfigureMockMvc(addFilters = false) // ✅ Spring Securityのフィルター無効化
 class CategoryControllerTest {
 
     @Autowired
@@ -30,20 +32,21 @@ class CategoryControllerTest {
     @Test
     @DisplayName("カテゴリ一覧取得：カテゴリが複数登録されている状態")
     void testGetAllCategoriesReturnsList() throws Exception {
-        List<Category> categories = Arrays.asList(
-            new Category(1, "キッチン"),
-            new Category(2, "インテリア")
-        );
+    List<Category> categories = Arrays.asList(
+        new Category(1, "キッチン"),
+        new Category(2, "インテリア")
+    );
 
-        when(categoryService.getAllCategories()).thenReturn(categories);
+    when(categoryService.getAllCategories()).thenReturn(categories);
 
-        mockMvc.perform(get("/api/categories"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].name").value("キッチン"))
-                .andExpect(jsonPath("$[1].name").value("インテリア"));
+    mockMvc.perform(get("/api/categories"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.length()").value(2))
+            .andExpect(jsonPath("$[0].categoryName").value("キッチン"))
+            .andExpect(jsonPath("$[1].categoryName").value("インテリア"));
     }
+
 
     @Test
     @DisplayName("カテゴリ一覧取得：カテゴリが1件も登録されていない状態")

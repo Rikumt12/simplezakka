@@ -58,7 +58,6 @@ public class OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setTotalAmount(cart.getTotalPrice());
         order.setCustomerName(customerInfo.getName());
-        order.setCustomerEmail(customerInfo.getEmail());
         order.setShippingAddress(customerInfo.getAddress());
         order.setShippingPhoneNumber(customerInfo.getPhoneNumber());
         order.setStatus("PENDING");
