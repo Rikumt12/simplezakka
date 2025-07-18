@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "admins")
 public class Admin {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,28 +16,28 @@ public class Admin {
 
     @Column(unique = true, nullable = false)
     private String username;
-    
+
     @Column(nullable = false)
     private String password;
-    
+
     @Column(unique = true, nullable = false)
     private String email;
-    
+
     @Column(nullable = false)
     private String role;
-    
+
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
-    
+
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
-    
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-    
+
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-    
+
     public Admin() {}
 
     public Admin(String name, String username, String password, String email, String role) {
@@ -47,9 +47,21 @@ public class Admin {
         this.email = email;
         this.role = role;
         this.active = true;
-        this.createdAt = LocalDateTime.now();
+    }
+
+    @PrePersist
+    private void prePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    private void preUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    // Getters & Setters
 
     public Long getId() {
         return id;
@@ -107,14 +119,6 @@ public class Admin {
         this.active = active;
     }
 
-    public boolean getIsActive() {
-        return active;
-    }
-
-    public void setIsActive(boolean active) {
-        this.active = active;
-    }
-
     public LocalDateTime getLastLoginAt() {
         return lastLoginAt;
     }
@@ -143,7 +147,7 @@ public class Admin {
     public String toString() {
         return "Admin{" +
                 "id=" + id +
-                ", name='" + name + '\'' +  
+                ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", role='" + role + '\'' +

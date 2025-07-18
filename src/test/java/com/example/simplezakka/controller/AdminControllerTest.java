@@ -8,22 +8,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
-
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(AdminController.class)
+@WithMockUser(username = "admin", roles = {"ADMIN"}) 
 public class AdminControllerTest {
 
     @Autowired
@@ -55,7 +55,6 @@ public class AdminControllerTest {
     @Test
     void showLogin_WithSession_RedirectDashboard() throws Exception {
         session.setAttribute("admin", new Admin());
-
         mockMvc.perform(get("/admin/login").session(session))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/dashboard"));
@@ -77,6 +76,7 @@ public class AdminControllerTest {
         );
 
         mockMvc.perform(post("/admin/api/login")
+                        .with(csrf())  
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody))
                         .session(session))
@@ -96,6 +96,7 @@ public class AdminControllerTest {
         );
 
         mockMvc.perform(post("/admin/api/login")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
                 .andExpect(status().isOk())
@@ -111,6 +112,7 @@ public class AdminControllerTest {
         );
 
         mockMvc.perform(post("/admin/api/login")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
                 .andExpect(status().isOk())
@@ -129,12 +131,12 @@ public class AdminControllerTest {
         );
 
         mockMvc.perform(post("/admin/api/login")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.error").value("ログイン処理中にエラーが発生しました"));
     }
-
 }
 
