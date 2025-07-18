@@ -40,4 +40,13 @@ public class Category {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    // ✅ テスト専用コンストラクタ（必要なら @VisibleForTesting を付けても良い）
+    public Category(Integer categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
 }
