@@ -70,7 +70,6 @@ class OrderRepositoryTest {
         order.setOrderDate(LocalDateTime.now());
         order.setTotalAmount(3000);
         order.setCustomerName(customerName);
-        order.setCustomerEmail(customerName.toLowerCase() + "@example.com");
         order.setShippingAddress("住所 " + customerName);
         order.setShippingPhoneNumber("090-" + customerName.hashCode());
         order.setStatus("PENDING");
