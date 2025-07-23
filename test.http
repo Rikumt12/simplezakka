@@ -1,7 +1,7 @@
 ### ECサイトログイン画面
 GET http://localhost:8080/top
  
- 
+##テスト1
 ### 商品一覧取得
 GET http://localhost:8080/api/products
  
@@ -40,6 +40,17 @@ GET http://localhost:8080/api/cart
 
 
 
+
+ 
+### カート取得
+GET http://localhost:8080/api/cart
+
+
+
+
+
+##テスト3
+
 ### 注文
 POST http://localhost:8080/api/orders
 content-type: application/json
@@ -50,15 +61,84 @@ content-type: application/json
         "address": "住所",
         "phoneNumber": "123"}
 }
- 
-### 管理者画面ログイン
-POST http://localhost:8080/admin/login
-//ID:admin
-//pass:admin123
- 
-### パスワード再設定画面
-POST http://localhost:8080/admin/forgot-password
- 
-###　管理者ダッシュボード画面
+
+
+
+
+
+##テスト4
+### 管理者ログイン成功
+POST http://localhost:8080/admin/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+
+### 管理者ログイン画面表示（未ログイン）
+GET http://localhost:8080/admin/login
+
+
+### 管理者ダッシュボード表示（ログイン済）
 GET http://localhost:8080/admin/dashboard
- 
+
+
+### 不正な管理者IDでログイン
+POST http://localhost:8080/admin/api/login
+Content-Type: application/json
+
+{
+  "username": "nonexistent_user",
+  "password": "admin123"
+}
+
+
+### 不正なパスワードでログイン
+POST http://localhost:8080/admin/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "wrong_password"
+}
+
+
+### 管理者IDが空でログイン
+POST http://localhost:8080/admin/api/login
+Content-Type: application/json
+
+{
+  "username": "",
+  "password": "admin123"
+}
+
+
+### パスワードが空でログイン
+POST http://localhost:8080/admin/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": ""
+}
+
+
+### 無効な管理者アカウントでログイン
+POST http://localhost:8080/admin/api/login
+Content-Type: application/json
+
+{
+  "username": "inactive_admin",
+  "password": "password123"
+}
+
+
+### ログイン状態確認処理中のエラー
+GET http://localhost:8080/admin/api/status
+
+
+
+
+##テスト5
