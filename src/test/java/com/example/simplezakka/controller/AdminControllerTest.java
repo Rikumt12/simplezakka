@@ -1,10 +1,10 @@
 package com.example.simplezakka.controller;
 
+import com.example.simplezakka.dto.product.ProductListItem;
 import com.example.simplezakka.entity.Admin;
 import com.example.simplezakka.service.AdminService;
 import com.example.simplezakka.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,14 +16,16 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.Map;
 
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(AdminController.class)
-@WithMockUser(username = "admin", roles = {"ADMIN"}) 
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 public class AdminControllerTest {
 
     @Autowired
@@ -44,6 +46,7 @@ public class AdminControllerTest {
     void setUp() {
         session = new MockHttpSession();
     }
+
 
     @Test
     void showLogin_NoSession_ReturnLoginView() throws Exception {
@@ -76,7 +79,7 @@ public class AdminControllerTest {
         );
 
         mockMvc.perform(post("/admin/api/login")
-                        .with(csrf())  
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestBody))
                         .session(session))
@@ -137,5 +140,104 @@ public class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(false))
                 .andExpect(jsonPath("$.error").value("ログイン処理中にエラーが発生しました"));
+    }
+
+    @Test
+    void showDashboard_WithSession_ReturnDashboard() throws Exception {
+        Admin admin = new Admin();
+        session.setAttribute("admin", admin);
+
+        Mockito.when(productService.findAllProducts()).thenReturn(List.of());
+
+        mockMvc.perform(get("/admin/dashboard").session(session))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/dashboard"))
+                .andExpect(model().attributeExists("admin"))
+                .andExpect(model().attributeExists("products"));
+    }
+
+    @Test
+    void showDashboard_NoSession_RedirectLogin() throws Exception {
+        mockMvc.perform(get("/admin/dashboard"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/login"));
+    }
+
+    @Test
+    void showForgotPassword_ReturnView() throws Exception {
+        mockMvc.perform(get("/admin/forgot-password"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/forgot-password"));
+    }
+
+    @Test
+    void showResetPassword_WithToken_ReturnView() throws Exception {
+        mockMvc.perform(get("/admin/reset-password").param("token", "test-token"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/reset-password"))
+                .andExpect(model().attribute("token", "test-token"));
+    }
+
+    @Test
+    void logout_InvalidateSession_RedirectLogin() throws Exception {
+        session.setAttribute("admin", new Admin());
+
+        mockMvc.perform(post("/admin/logout").session(session).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/admin/login"));
+    }
+
+    @Test
+    void logoutApi_Success_ReturnTrue() throws Exception {
+        session.setAttribute("admin", new Admin());
+
+        mockMvc.perform(post("/admin/api/logout").session(session).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(true))
+                .andExpect(jsonPath("$.message").value("ログアウトしました"));
+    }
+
+    @Test
+    void logoutApi_Exception_ReturnError() throws Exception {
+        MockHttpSession faultySession = Mockito.mock(MockHttpSession.class);
+        doThrow(new IllegalStateException("session error")).when(faultySession).invalidate();
+
+        mockMvc.perform(post("/admin/api/logout").session(faultySession).with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.error").value("ログアウト処理中にエラーが発生しました"));
+    }
+
+    @Test
+    void getLoginStatus_WithSession_ReturnAdminInfo() throws Exception {
+        Admin admin = new Admin();
+        admin.setUsername("admin");
+        admin.setName("システム管理者");
+        admin.setEmail("admin@example.com");
+        session.setAttribute("admin", admin);
+
+        mockMvc.perform(get("/admin/api/status").session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.loggedIn").value(true))
+                .andExpect(jsonPath("$.admin.username").value("admin"))
+                .andExpect(jsonPath("$.admin.name").value("システム管理者"))
+                .andExpect(jsonPath("$.admin.email").value("admin@example.com"));
+    }
+
+    @Test
+    void getLoginStatus_NoSession_ReturnFalse() throws Exception {
+        mockMvc.perform(get("/admin/api/status"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.loggedIn").value(false));
+    }
+
+    @Test
+    void getLoginStatus_Exception_ReturnFalse() throws Exception {
+        MockHttpSession faultySession = Mockito.mock(MockHttpSession.class);
+        Mockito.when(faultySession.getAttribute("admin")).thenThrow(new RuntimeException("internal error"));
+
+        mockMvc.perform(get("/admin/api/status").session(faultySession))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.loggedIn").value(false));
     }
 }
