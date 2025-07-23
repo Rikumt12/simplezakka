@@ -7,9 +7,12 @@ GET http://localhost:8080/api/products
  
 ### 商品詳細取得
 GET http://localhost:8080/api/products/1
- 
 
+###存在しない商品IDを指定
+GET http://localhost:8080/api/products/999
 
+###不正な形式の商品IDを指定
+GET http://localhost:8080/api/products/abc
 
 ##テスト2
 ### カートに追加
