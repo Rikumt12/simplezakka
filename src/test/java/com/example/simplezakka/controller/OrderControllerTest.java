@@ -242,6 +242,38 @@ class OrderControllerTest {
             invalidRequest.setCustomerInfo(invalidCustomer);
             performValidationTest(invalidRequest, "customerInfo.phoneNumber", "電話番号は必須です");
         }
+
+        @Test
+@DisplayName("CustomerInfo.email が null の場合、400 Bad Request とエラーメッセージを返す")
+void placeOrder_WithNullEmail_ShouldReturnBadRequest() throws Exception {
+    CustomerInfo invalidCustomer = new CustomerInfo();
+    invalidCustomer.setName("Name");
+    invalidCustomer.setEmail(null);
+    invalidCustomer.setAddress("Addr");
+    invalidCustomer.setPhoneNumber("123");
+
+    OrderRequest invalidRequest = new OrderRequest();
+    invalidRequest.setCustomerInfo(invalidCustomer);
+
+    performValidationTest(invalidRequest, "customerInfo.email", "メールアドレスは必須です");
+}
+
+@Test
+@DisplayName("CustomerInfo.address が null の場合、400 Bad Request とエラーメッセージを返す")
+void placeOrder_WithNullAddress_ShouldReturnBadRequest() throws Exception {
+    CustomerInfo invalidCustomer = new CustomerInfo();
+    invalidCustomer.setName("Name");
+    invalidCustomer.setEmail("test@example.com");
+    invalidCustomer.setAddress(null);
+    invalidCustomer.setPhoneNumber("123");
+
+    OrderRequest invalidRequest = new OrderRequest();
+    invalidRequest.setCustomerInfo(invalidCustomer);
+
+    performValidationTest(invalidRequest, "customerInfo.address", "住所は必須です");
+}
+
+
     }
 
     // 異常系テスト: リクエストボディ/Service例外
@@ -287,7 +319,7 @@ class OrderControllerTest {
 
         @Test
         @DisplayName("OrderServiceが在庫不足を示す特定の例外(例: IllegalStateException)をスローした場合、500 Internal Server Errorを返す")
-        void placeOrder_WhenOrderServiceThrowsSpecificException_ShouldReturnInternalServerError() throws Exception {
+        void placeOrder_WhenOrderServiceThrowsIllegalStateException_ShouldReturnInternalServerError() throws Exception {
             IllegalStateException serviceException = new IllegalStateException("在庫が不足しています: 商品X");
             when(orderService.placeOrder(any(Cart.class), any(OrderRequest.class), any(HttpSession.class)))
                     .thenThrow(serviceException);
@@ -304,5 +336,30 @@ class OrderControllerTest {
             verify(orderService, times(1)).placeOrder(eq(cartWithItems), eq(validOrderRequest), any(HttpSession.class));
             verifyNoMoreInteractions(cartService, orderService);
         }
+
+        @Test
+@DisplayName("OrderService が IllegalStateException をスローした場合、500 Internal Server Error を返す")
+void placeOrder_WhenOrderServiceThrowsSpecificException_ShouldReturnInternalServerError() throws Exception {
+    when(cartService.getCartFromSession(any(HttpSession.class))).thenReturn(cartWithItems);
+    when(orderService.placeOrder(any(Cart.class), any(OrderRequest.class), any(HttpSession.class)))
+            .thenThrow(new IllegalStateException("在庫が不足しています"));
+
+    mockMvc.perform(post("/api/orders")
+                    .session(mockSession)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(validOrderRequest))
+                    .with(csrf())
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isInternalServerError());
+
+    verify(cartService, times(1)).getCartFromSession(any(HttpSession.class));
+    verify(orderService, times(1)).placeOrder(eq(cartWithItems), eq(validOrderRequest), any(HttpSession.class));
+    verifyNoMoreInteractions(cartService, orderService);
+}
+
     }
+
+    
+
+
 }

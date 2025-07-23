@@ -7,20 +7,41 @@ GET http://localhost:8080/api/products
  
 ### 商品詳細取得
 GET http://localhost:8080/api/products/1
- 
-### カートに追加
+
+
+
+### 2-1
 POST http://localhost:8080/api/cart
 content-type: application/json
  
 {
-    "productId": 1,
-    "quantity": 2
+    "productId": 2,
+    "quantity": 1
 }
- 
-### カート取得
-GET http://localhost:8080/api/cart
- 
- 
+
+### 2-0削除用
+DELETE http://localhost:8080/api/cart/items/2
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 3
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### 注文
 POST http://localhost:8080/api/orders
 content-type: application/json
