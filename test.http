@@ -7,6 +7,9 @@ GET http://localhost:8080/api/products
  
 ### 商品詳細取得
 GET http://localhost:8080/api/products/1
+
+### 存在しない商品IDのテストリクエスト
+GET http://localhost:8080/api/products/999
  
 ### カートに追加
 POST http://localhost:8080/api/cart
