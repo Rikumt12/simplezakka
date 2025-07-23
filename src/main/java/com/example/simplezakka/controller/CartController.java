@@ -56,4 +56,11 @@ public class CartController {
         Cart cart = cartService.removeItemFromCart(itemId, session);
         return ResponseEntity.ok(cart);
     }
+
+    @DeleteMapping
+    public ResponseEntity<Cart> clearCart(HttpSession session) {
+        Cart emptyCart = new Cart();
+        session.setAttribute("cart", emptyCart);
+        return ResponseEntity.ok(emptyCart);
+    }
 }

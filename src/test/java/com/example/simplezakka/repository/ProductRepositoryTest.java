@@ -344,4 +344,36 @@ class ProductRepositoryTest {
         .isInstanceOf(DataIntegrityViolationException.class)
         .hasCauseInstanceOf(PersistenceException.class);
     }
+
+    @Test
+@DisplayName("商品を正常に保存し、IDで検索できる（createdAt, updatedAt が現在時刻に近い）")
+void saveAndFindById_TimestampValidation() {
+    // Arrange
+    Product newProduct = createProduct("新商品C", 3000, 20);
+    LocalDateTime beforeSave = LocalDateTime.now();
+
+    // Act
+    Product savedProduct = productRepository.save(newProduct);
+    entityManager.flush();
+    Integer savedId = savedProduct.getProductId();
+    entityManager.clear();
+
+    Optional<Product> foundProductOpt = productRepository.findById(savedId);
+
+    // Assert
+    assertThat(foundProductOpt).isPresent();
+    Product foundProduct = foundProductOpt.get();
+    assertThat(foundProduct.getName()).isEqualTo(newProduct.getName());
+    assertThat(foundProduct.getPrice()).isEqualTo(newProduct.getPrice());
+    assertThat(foundProduct.getStock()).isEqualTo(newProduct.getStock());
+
+    // ここで「現在時刻に近い」ことを検証（60秒以内ならOK）
+    LocalDateTime createdAt = foundProduct.getCreatedAt();
+    LocalDateTime updatedAt = foundProduct.getUpdatedAt();
+    LocalDateTime afterSave = LocalDateTime.now();
+
+    assertThat(createdAt).isBetween(beforeSave.minusSeconds(1), afterSave.plusSeconds(1));
+    assertThat(updatedAt).isBetween(beforeSave.minusSeconds(1), afterSave.plusSeconds(1));
+    assertThat(updatedAt).isEqualTo(createdAt);
+}
 }
