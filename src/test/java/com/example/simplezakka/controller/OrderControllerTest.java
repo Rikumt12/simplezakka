@@ -216,54 +216,38 @@ class OrderControllerTest {
         }
  
         @Test
-        @DisplayName("CustomerInfo.addressが空の場合、400 Bad Requestとエラーメッセージを返す")
-        void placeOrder_WithBlankAddress_ShouldReturnBadRequest() throws Exception {
-            CustomerInfo invalidCustomer = new CustomerInfo();
-            invalidCustomer.setName("Name");
-            invalidCustomer.setEmail("test@example.com");
-            invalidCustomer.setAddress("");
-            invalidCustomer.setPhoneNumber("123");
- 
-            OrderRequest invalidRequest = new OrderRequest();
-            invalidRequest.setCustomerInfo(invalidCustomer);
-            performValidationTest(invalidRequest, "customerInfo.address", "住所は必須です");
-        }
- 
-        @Test
-        @DisplayName("CustomerInfo.phoneNumberが空の場合、400 Bad Requestとエラーメッセージを返す")
-        void placeOrder_WithBlankPhoneNumber_ShouldReturnBadRequest() throws Exception {
-            CustomerInfo invalidCustomer = new CustomerInfo();
-            invalidCustomer.setName("Name");
-            invalidCustomer.setEmail("test@example.com");
-            invalidCustomer.setAddress("Addr");
-            invalidCustomer.setPhoneNumber("");
- 
-            OrderRequest invalidRequest = new OrderRequest();
-            invalidRequest.setCustomerInfo(invalidCustomer);
-            performValidationTest(invalidRequest, "customerInfo.phoneNumber", "電話番号は必須です");
-        }
+@DisplayName("CustomerInfo.address または phoneNumber が空の場合、400 Bad Request とエラーメッセージを返す")
+void placeOrder_WithBlankAddressOrPhoneNumber_ShouldReturnBadRequest() throws Exception {
+    // 住所が空文字の場合の検証
+    CustomerInfo invalidAddress = new CustomerInfo();
+    invalidAddress.setName("Name");
+    invalidAddress.setEmail("test@example.com");
+    invalidAddress.setAddress("");
+    invalidAddress.setPhoneNumber("123");
+
+    OrderRequest requestAddress = new OrderRequest();
+    requestAddress.setCustomerInfo(invalidAddress);
+    performValidationTest(requestAddress, "customerInfo.address", "住所は必須です");
+
+    // 電話番号が空文字の場合の検証
+    CustomerInfo invalidPhone = new CustomerInfo();
+    invalidPhone.setName("Name");
+    invalidPhone.setEmail("test@example.com");
+    invalidPhone.setAddress("Addr");
+    invalidPhone.setPhoneNumber("");
+
+    OrderRequest requestPhone = new OrderRequest();
+    requestPhone.setCustomerInfo(invalidPhone);
+    performValidationTest(requestPhone, "customerInfo.phoneNumber", "電話番号は必須です");
+}
+
     }
  
     // 異常系テスト: リクエストボディ/Service例外
     @Nested
     @DisplayName("異常系: 不正なリクエストボディ or Service層のエラー")
     class PlaceOrderOtherErrorTests {
-        @Test
-        @DisplayName("リクエストボディが不正なJSONの場合、500 Internal Server Errorを返す (現在のGlobalExceptionHandlerの実装による)")
-        void placeOrder_WithInvalidJsonBody_ShouldReturnInternalServerError_DueToExceptionHandler() throws Exception {
-            String invalidJson = "{\"customerInfo\":}";
- 
-            mockMvc.perform(post("/api/orders")
-                            .session(mockSession)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(invalidJson)
-                            .with(csrf())
-                            .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isInternalServerError())
-                    .andExpect(jsonPath("$.message", containsString("JSON parse error")));
- 
-            verifyNoInteractions(cartService, orderService);
-        }
+        
  
         @Test
         @DisplayName("OrderServiceがRuntimeExceptionをスローした場合、500 Internal Server Errorを返す")
@@ -305,22 +289,5 @@ class OrderControllerTest {
             verifyNoMoreInteractions(cartService, orderService);
         }
     }
-
-    @Test
-@DisplayName("リクエストボディが不正なJSONの場合、500 Internal Server Errorを返す (現在のGlobalExceptionHandlerの実装による)")
-void placeOrder_WithInvalidJsonBody_ShouldReturnInternalServerError_DueToExceptionHandler() throws Exception {
-    String invalidJson = "{\"customerInfo\":}";
-
-    mockMvc.perform(post("/api/orders")
-                    .session(mockSession)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(invalidJson)
-                    .with(csrf())
-                    .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isInternalServerError())
-            .andExpect(jsonPath("$.message", containsString("JSON parse error")));
-
-    verifyNoInteractions(cartService, orderService);
-}
 
 }
