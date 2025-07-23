@@ -253,4 +253,19 @@ class OrderRepositoryTest {
         // .hasMessageContaining("NULL not allowed for column \"CUSTOMER_NAME\""); // DB依存のエラーメッセージ確認は脆い場合がある
     }
 
+    @Test
+@DisplayName("注文保存時にcreatedAtとupdatedAtが設定される")
+void saveOrder_ShouldSetCreatedAtAndUpdatedAt() {
+    Order order = createSampleOrder("日時設定検証顧客");
+    Order savedOrder = orderRepository.save(order);
+    entityManager.flush();
+    entityManager.clear();
+
+    Order foundOrder = entityManager.find(Order.class, savedOrder.getOrderId());
+    assertThat(foundOrder.getCreatedAt()).isNotNull();
+    assertThat(foundOrder.getUpdatedAt()).isNotNull();
+    assertThat(foundOrder.getUpdatedAt()).isEqualTo(foundOrder.getCreatedAt());
+}
+
+
 }

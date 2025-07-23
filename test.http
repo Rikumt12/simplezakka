@@ -8,6 +8,9 @@ GET http://localhost:8080/api/products
 ### 商品詳細取得
 GET http://localhost:8080/api/products/1
 
+
+
+### 2-1
 ###存在しない商品IDを指定
 GET http://localhost:8080/api/products/999
 
@@ -16,13 +19,40 @@ GET http://localhost:8080/api/products/abc
 
 ##テスト2
 ### カートに追加
+
 POST http://localhost:8080/api/cart
 content-type: application/json
  
 {
-    "productId": 1,
-    "quantity": 2
+    "productId": 2,
+    "quantity": 1
 }
+
+
+### 2-0削除用
+DELETE http://localhost:8080/api/cart/items/2
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 3
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
 ### カート取得
 GET http://localhost:8080/api/cart
@@ -32,6 +62,7 @@ GET http://localhost:8080/api/cart
 
 
 ##テスト3
+
 ### 注文
 POST http://localhost:8080/api/orders
 content-type: application/json
