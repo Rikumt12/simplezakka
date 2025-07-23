@@ -17,15 +17,15 @@ content-type: application/json
 {"productId": 1, "quantity": 1}
 
 ### 2-0削除
-DELETE http://localhost:8080/api/cart/items/1
+DELETE http://localhost:8080/api/cart/items/999
 Content-Type: application/json
 
 ### 2-4更新
-PUT http://localhost:8080/api/cart/items/1
+PUT http://localhost:8080/api/cart/items/999
 Content-Type: application/json
 
 {
-    "quantity": 0
+    "quantity": 5
 }
 
 ### 2-7カート取得
