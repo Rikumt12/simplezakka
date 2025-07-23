@@ -17,7 +17,7 @@ content-type: application/json
 {"productId": 1, "quantity": 1}
 
 ### 2-0削除
-DELETE http://localhost:8080/api/cart/items/999
+DELETE http://localhost:8080/api/cart/items/1
 Content-Type: application/json
 
 ### 2-4更新
