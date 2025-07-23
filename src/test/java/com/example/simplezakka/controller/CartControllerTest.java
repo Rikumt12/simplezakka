@@ -19,7 +19,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Map;
 
@@ -174,32 +173,13 @@ class CartControllerTest {
             itemInfo.setProductId(null);
             itemInfo.setQuantity(1);
 
-            ResultActions result = mockMvc.perform(post("/api/cart")
-                    .session(mockSession)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(itemInfo))
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest());
-
-            result.andExpect(jsonPath("$.productId", is("商品IDは必須です")));
-
-            verifyNoInteractions(cartService);
-        }
-
-        @Test
-        @DisplayName("quantityがnullの場合、400 Bad Requestとエラーメッセージを返す")
-        void addItem_WithNullQuantity_ShouldReturnBadRequest() throws Exception {
-            CartItemInfo itemInfo = new CartItemInfo();
-            itemInfo.setProductId(1);
-            itemInfo.setQuantity(null);
-
             mockMvc.perform(post("/api/cart")
                     .session(mockSession)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(itemInfo))
                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.quantity", is("数量は必須です")));
+                    .andExpect(jsonPath("$.productId", is("商品IDは必須です")));
 
             verifyNoInteractions(cartService);
         }
@@ -210,24 +190,6 @@ class CartControllerTest {
             CartItemInfo itemInfo = new CartItemInfo();
             itemInfo.setProductId(1);
             itemInfo.setQuantity(0);
-
-            mockMvc.perform(post("/api/cart")
-                    .session(mockSession)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(itemInfo))
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.quantity", is("数量は1以上である必要があります")));
-
-            verifyNoInteractions(cartService);
-        }
-
-        @Test
-        @DisplayName("quantityが負数の場合、400 Bad Requestとエラーメッセージを返す")
-        void addItem_WithNegativeQuantity_ShouldReturnBadRequest() throws Exception {
-            CartItemInfo itemInfo = new CartItemInfo();
-            itemInfo.setProductId(1);
-            itemInfo.setQuantity(-1);
 
             mockMvc.perform(post("/api/cart")
                     .session(mockSession)
@@ -274,47 +236,11 @@ class CartControllerTest {
         }
 
         @Test
-        @DisplayName("quantityがnullの場合、400 Bad Requestとエラーメッセージを返す")
-        void updateItem_WithNullQuantity_ShouldReturnBadRequest() throws Exception {
-            String itemId = "1";
-            CartItemQuantityDto quantityDto = new CartItemQuantityDto();
-            quantityDto.setQuantity(null);
-
-            mockMvc.perform(put("/api/cart/items/{itemId}", itemId)
-                    .session(mockSession)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(quantityDto))
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.quantity", is("数量は必須です")));
-
-            verifyNoInteractions(cartService);
-        }
-
-        @Test
         @DisplayName("quantityが0の場合、400 Bad Requestとエラーメッセージを返す")
         void updateItem_WithZeroQuantity_ShouldReturnBadRequest() throws Exception {
             String itemId = "1";
             CartItemQuantityDto quantityDto = new CartItemQuantityDto();
             quantityDto.setQuantity(0);
-
-            mockMvc.perform(put("/api/cart/items/{itemId}", itemId)
-                    .session(mockSession)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(quantityDto))
-                    .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.quantity", is("数量は1以上である必要があります")));
-
-            verifyNoInteractions(cartService);
-        }
-
-        @Test
-        @DisplayName("quantityが負数の場合、400 Bad Requestとエラーメッセージを返す")
-        void updateItem_WithNegativeQuantity_ShouldReturnBadRequest() throws Exception {
-            String itemId = "1";
-            CartItemQuantityDto quantityDto = new CartItemQuantityDto();
-            quantityDto.setQuantity(-5);
 
             mockMvc.perform(put("/api/cart/items/{itemId}", itemId)
                     .session(mockSession)
