@@ -82,7 +82,24 @@ GET http://localhost:8080/admin/login
 
 
 ### 管理者ダッシュボード表示（ログイン済）
-GET http://localhost:8080/admin/dashboard
+### 変数設定
+@base_url = http://localhost:8080
+
+### 管理者ログイン（セッション確立）
+POST {{base_url}}/admin/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+
+### 
+GET {{base_url}}/admin/dashboard
+
+###
 
 
 ### 不正な管理者IDでログイン
@@ -138,6 +155,26 @@ Content-Type: application/json
 ### ログイン状態確認処理中のエラー
 GET http://localhost:8080/admin/api/status
 
+###
+
+# まず管理者でログインしてセッションを確立
+POST http://localhost:8080/admin/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+
+# ログイン済み状態でログイン画面にアクセス
+GET http://localhost:8080/admin/login
+
+###
+
+# 新しいセッション（未ログイン状態）でダッシュボードにアクセス
+GET http://localhost:8080/admin/dashboard
 
 
 
