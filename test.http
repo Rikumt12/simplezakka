@@ -10,28 +10,26 @@ GET http://localhost:8080/api/products/1
 
 
 
-### 2-1
+### 2-1追加
 POST http://localhost:8080/api/cart
 content-type: application/json
  
-{
-    "productId": 2,
-    "quantity": 1
-}
+{"productId": 1, "quantity": 1}
 
-### 2-0削除用
-DELETE http://localhost:8080/api/cart/items/2
+### 2-0削除
+DELETE http://localhost:8080/api/cart/items/1
+Content-Type: application/json
+
+### 2-4更新
+PUT http://localhost:8080/api/cart/items/1
 Content-Type: application/json
 
 {
-  "productId": 1,
-  "quantity": 3
+    "quantity": 0
 }
 
-
-
-
-
+### 2-7カート取得
+GET http://localhost:8080/api/cart
 
 
 
