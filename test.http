@@ -46,6 +46,7 @@ content-type: application/json
 
 ##テスト4
 ### 管理者画面ログイン
+GET http://localhost:8080/admin/api/login
 POST http://localhost:8080/admin/login
 //ID:admin
 //pass:admin123
