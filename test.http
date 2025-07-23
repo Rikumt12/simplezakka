@@ -89,3 +89,4 @@ Accept: application/json
 ### 5-7: APIタイムアウト検証用リクエスト
 GET http://localhost:8080/api/products?category=キッチン用品
 Accept: application/json
+//レスポンスを10秒以上遅延させる方法不明
