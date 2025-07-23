@@ -322,6 +322,7 @@ public class DataLoader implements CommandLineRunner {
                 false,
                 kitchen
             )
+            
         );
        
         productRepository.saveAll(products);
