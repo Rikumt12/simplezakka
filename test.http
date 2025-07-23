@@ -73,20 +73,10 @@ Accept: application/json
 GET http://localhost:8080/api/products?category=おもちゃ
 Accept: application/json
 
-### 5-4: 空のカテゴリ名（正常系 - 全商品が返却される）
+### 5-4: 空のカテゴリ名（異常系 - 全商品が返却される）
 GET http://localhost:8080/api/products?category=
 Accept: application/json
 
 ### 5-5: カテゴリ別表示（異常系 - 数字や記号のカテゴリ名）
 GET http://localhost:8080/api/products?category=123@#%
 Accept: application/json
-
-### 5-6: カテゴリ別表示（異常系 - DB接続エラー）
-GET http://localhost:8080/api/products?category=キッチン用品
-Accept: application/json
-//DBの停止方法が分からないため保留
-
-### 5-7: APIタイムアウト検証用リクエスト
-GET http://localhost:8080/api/products?category=キッチン用品
-Accept: application/json
-//レスポンスを10秒以上遅延させる方法不明
