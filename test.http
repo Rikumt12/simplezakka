@@ -60,3 +60,32 @@ GET http://localhost:8080/admin/dashboard
 
 
 ##テスト5
+
+### 5-1: カテゴリ別表示（正常系 - 「キッチン用品」カテゴリの商品が表示される）
+GET http://localhost:8080/api/products?category=キッチン用品
+Accept: application/json
+
+### 5-2: 全カテゴリ表示（正常系 - 全商品が返却される）
+GET http://localhost:8080/api/products
+Accept: application/json
+
+### 5-3: 存在しないカテゴリ名（異常系 - 空リスト返却）
+GET http://localhost:8080/api/products?category=おもちゃ
+Accept: application/json
+
+### 5-4: 空のカテゴリ名（正常系 - 全商品が返却される）
+GET http://localhost:8080/api/products?category=
+Accept: application/json
+
+### 5-5: カテゴリ別表示（異常系 - 数字や記号のカテゴリ名）
+GET http://localhost:8080/api/products?category=123@#%
+Accept: application/json
+
+### 5-6: カテゴリ別表示（異常系 - DB接続エラー）
+GET http://localhost:8080/api/products?category=キッチン用品
+Accept: application/json
+//DBの停止方法が分からないため保留
+
+### 5-7: APIタイムアウト検証用リクエスト
+GET http://localhost:8080/api/products?category=キッチン用品
+Accept: application/json

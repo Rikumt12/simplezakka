@@ -27,18 +27,19 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductListItem>> getProducts(
-            @RequestParam(value = "category", required = false) String category) {
- 
+        @RequestParam(value = "category", required = false) String category) throws InterruptedException {
+
         List<ProductListItem> products;
- 
+
         if (category == null || category.isEmpty()) {
-            products = productService.findAllProducts();
+        products = productService.findAllProducts();
         } else {
-            products = productService.findProductsByCategoryName(category);
+        products = productService.findProductsByCategoryName(category);
         }
- 
+
         return ResponseEntity.ok(products);
     }
+
  
     @GetMapping("/{productId}")
     public ResponseEntity<ProductItem> getProductById(@PathVariable Integer productId) {
@@ -48,4 +49,5 @@ public class ProductController {
         }
         return ResponseEntity.ok(product);
     }
+
 }
