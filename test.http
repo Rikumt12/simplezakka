@@ -157,7 +157,7 @@ GET http://localhost:8080/admin/api/status
 
 ###
 
-# まず管理者でログインしてセッションを確立
+# 管理者でログインしてセッションを確立
 POST http://localhost:8080/admin/api/login
 Content-Type: application/json
 
@@ -173,7 +173,7 @@ GET http://localhost:8080/admin/login
 
 ###
 
-# 新しいセッション（未ログイン状態）でダッシュボードにアクセス
+# 未ログイン状態でダッシュボードにアクセス
 GET http://localhost:8080/admin/dashboard
 
 
