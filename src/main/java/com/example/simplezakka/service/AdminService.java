@@ -18,7 +18,6 @@ public class AdminService {
     
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
- 
     @PostConstruct
     public void initializeDefaultAdmin() {
         String defaultUsername = "admin";
@@ -48,12 +47,32 @@ public class AdminService {
             } else {
                 System.out.println("管理者アカウントは既に存在します");
             }
+
+            // 無効な管理者アカウントを追加
+            String inactiveUsername = "inactive_admin";
+            Optional<Admin> existingInactive = adminRepository.findByUsername(inactiveUsername);
+            if (existingInactive.isEmpty()) {
+                Admin inactiveAdmin = new Admin();
+                inactiveAdmin.setUsername(inactiveUsername);
+                inactiveAdmin.setPassword(passwordEncoder.encode("password123")); // 任意のパスワード
+                inactiveAdmin.setName("無効な管理者");
+                inactiveAdmin.setEmail("inactive@example.com");
+                inactiveAdmin.setRole("ADMIN");
+                inactiveAdmin.setActive(false);  // 無効アカウントに設定
+                inactiveAdmin.setCreatedAt(LocalDateTime.now());
+                inactiveAdmin.setUpdatedAt(LocalDateTime.now());
+
+                adminRepository.save(inactiveAdmin);
+                System.out.println("無効な管理者アカウントを作成しました: " + inactiveUsername);
+            } else {
+                System.out.println("無効な管理者アカウントは既に存在します");
+            }
+            
         } catch (Exception e) {
             System.err.println("初期管理者アカウントの作成に失敗しました: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
   
     public void createAdmin(String username, String password, String name, String email) {
         if (adminRepository.findByUsername(username).isPresent()) {
@@ -73,7 +92,6 @@ public class AdminService {
         adminRepository.save(admin);
     }
 
- 
     public Admin authenticate(String username, String password) {
         try {
             Optional<Admin> adminOpt = adminRepository.findByUsername(username);
@@ -102,7 +120,6 @@ public class AdminService {
         }
     }
 
- 
     public Admin findByUsername(String username) {
         return adminRepository.findByUsername(username).orElse(null);
     }

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 
 @Controller
 @RequestMapping("/admin")
@@ -36,42 +38,48 @@ public class AdminController {
         return "admin/login";
     }
 
-    @PostMapping("/api/login")
-    @ResponseBody
-    public ResponseEntity<?> login(@RequestBody Map<String, String> loginData, HttpSession session) {
-        try {
-            String username = loginData.get("username");
-            String password = loginData.get("password");
+   @PostMapping("/api/login")
+@ResponseBody
+public ResponseEntity<?> login(@RequestBody Map<String, String> loginData, HttpSession session) {
+    try {
+        String username = loginData.get("username");
+        String password = loginData.get("password");
 
-            if (username == null || username.trim().isEmpty() ||
-                password == null || password.trim().isEmpty()) {
-                return ResponseEntity.ok(Map.of(
-                    "success", false,
-                    "error", "管理者IDとパスワードを入力してください"
-                ));
-            }
+        if (username == null || username.trim().isEmpty() ||
+            password == null || password.trim().isEmpty()) {
+            return ResponseEntity.ok(Map.of(
+                "success", false,
+                "error", "管理者IDとパスワードを入力してください"
+            ));
+        }
 
-            Admin admin = adminService.authenticate(username.trim(), password);
-            if (admin != null) {
-                session.setAttribute("admin", admin);
-                return ResponseEntity.ok(Map.of(
-                    "success", true,
-                    "message", "ログインしました"
-                ));
+        Admin admin = adminService.authenticate(username.trim(), password);
+        if (admin == null) {
+
+            Optional<Admin> checkAdmin = Optional.ofNullable(adminService.findByUsername(username.trim()));
+            if (checkAdmin.isPresent() && !checkAdmin.get().isActive()) {
+
+                return ResponseEntity.ok(Map.of("loggedIn", false));
             } else {
+ 
                 return ResponseEntity.ok(Map.of(
                     "success", false,
                     "error", "管理者IDまたはパスワードが間違っています"
                 ));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.ok(Map.of(
-                "success", false,
-                "error", "ログイン処理中にエラーが発生しました"
-            ));
         }
+
+        session.setAttribute("admin", admin);
+        return ResponseEntity.ok(Map.of(
+            "success", true,
+            "message", "ログインしました"
+        ));
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.ok(Map.of("loggedIn", false));
     }
+}
 
     @GetMapping("/dashboard")
     public String showDashboard(HttpSession session, Model model) {
