@@ -1,12 +1,14 @@
 package com.example.simplezakka.controller;
 
 import com.example.simplezakka.dto.cart.Cart;
+import com.example.simplezakka.dto.order.CustomerInfo;
 import com.example.simplezakka.dto.order.OrderRequest;
 import com.example.simplezakka.dto.order.OrderResponse;
 import com.example.simplezakka.service.CartService;
 import com.example.simplezakka.service.OrderService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,28 +23,37 @@ public class OrderController {
 
     private final OrderService orderService;
     private final CartService cartService;
-    
+
     @Autowired
     public OrderController(OrderService orderService, CartService cartService) {
         this.orderService = orderService;
         this.cartService = cartService;
     }
-    
+
     @PostMapping
     public ResponseEntity<OrderResponse> placeOrder(
             @Valid @RequestBody OrderRequest orderRequest,
             HttpSession session) {
-        
+
         Cart cart = cartService.getCartFromSession(session);
-        
+
         if (cart == null || cart.getItems().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        
+
         try {
-            OrderResponse orderResponse = orderService.placeOrder(cart, orderRequest, session);
-            return ResponseEntity.status(HttpStatus.CREATED).body(orderResponse);
+            
+            CustomerInfo info = orderRequest.getCustomerInfo();
+            info.setName(StringEscapeUtils.escapeHtml4(info.getName()));
+            info.setEmail(StringEscapeUtils.escapeHtml4(info.getEmail()));
+            info.setAddress(StringEscapeUtils.escapeHtml4(info.getAddress()));
+            info.setPhoneNumber(StringEscapeUtils.escapeHtml4(info.getPhoneNumber()));
+
+            OrderResponse response = orderService.placeOrder(cart, orderRequest, session);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+
         } catch (Exception e) {
+            
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
