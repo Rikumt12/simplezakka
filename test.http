@@ -14,7 +14,7 @@ GET http://localhost:8080/api/products/1
 POST http://localhost:8080/api/cart
 content-type: application/json
  
-{"productId": 1, "quantity": 1}
+{"productId":1, "quantity":1}
 
 ### 2-0削除
 DELETE http://localhost:8080/api/cart/items/1
