@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class AdminServiceTest {
@@ -35,31 +36,54 @@ class AdminServiceTest {
         closeable.close();
     }
 
-    @Test
-    void initializeDefaultAdmin_WhenNotExists_ShouldCreate() {
-        when(adminRepository.findByUsername("admin")).thenReturn(Optional.empty());
-        adminService.initializeDefaultAdmin();
-        ArgumentCaptor<Admin> captor = ArgumentCaptor.forClass(Admin.class);
-        verify(adminRepository).save(captor.capture());
-        
-        Admin savedAdmin = captor.getValue();
-        assertEquals("admin", savedAdmin.getUsername());
-        assertTrue(passwordEncoder.matches("admin123", savedAdmin.getPassword()));
-        assertEquals("システム管理者", savedAdmin.getName());
-        assertEquals("admin@simplezakka.com", savedAdmin.getEmail());
-        assertEquals("ADMIN", savedAdmin.getRole());
-        assertTrue(savedAdmin.isActive());
-        assertNotNull(savedAdmin.getCreatedAt());
-        assertNotNull(savedAdmin.getUpdatedAt());
-    }
+   
+   @Test
+void initializeDefaultAdmin_WhenNotExists_ShouldCreate() {
+    
+    when(adminRepository.findByUsername("admin")).thenReturn(Optional.empty());
+    when(adminRepository.findByUsername("inactive_admin")).thenReturn(Optional.empty());
+    
+    adminService.initializeDefaultAdmin();
+    
+    ArgumentCaptor<Admin> captor = ArgumentCaptor.forClass(Admin.class);
+    verify(adminRepository, times(2)).save(captor.capture());
+    
+    var savedAdmins = captor.getAllValues();
+    assertEquals(2, savedAdmins.size());
+    
+    Admin defaultAdmin = savedAdmins.get(0);
+    assertEquals("admin", defaultAdmin.getUsername());
+    assertTrue(passwordEncoder.matches("admin123", defaultAdmin.getPassword()));
+    assertEquals("システム管理者", defaultAdmin.getName());
+    assertEquals("admin@simplezakka.com", defaultAdmin.getEmail());
+    assertEquals("ADMIN", defaultAdmin.getRole());
+    assertTrue(defaultAdmin.isActive());
+    assertNotNull(defaultAdmin.getCreatedAt());
+    assertNotNull(defaultAdmin.getUpdatedAt());
+    
+    Admin inactiveAdmin = savedAdmins.get(1);
+    assertEquals("inactive_admin", inactiveAdmin.getUsername());
+    assertTrue(passwordEncoder.matches("password123", inactiveAdmin.getPassword()));
+    assertEquals("無効な管理者", inactiveAdmin.getName());
+    assertEquals("inactive@example.com", inactiveAdmin.getEmail());
+    assertEquals("ADMIN", inactiveAdmin.getRole());
+    assertFalse(inactiveAdmin.isActive()); 
+    assertNotNull(inactiveAdmin.getCreatedAt());
+    assertNotNull(inactiveAdmin.getUpdatedAt());
+}
 
-    @Test
-    void initializeDefaultAdmin_WhenExists_ShouldSkip() {
-        Admin existingAdmin = new Admin();
-        when(adminRepository.findByUsername("admin")).thenReturn(Optional.of(existingAdmin));
-        adminService.initializeDefaultAdmin();
-        verify(adminRepository, never()).save(any(Admin.class));
-    }
+@Test
+void initializeDefaultAdmin_WhenExists_ShouldSkip() {
+    Admin existingAdmin = new Admin();
+    Admin existingInactiveAdmin = new Admin();
+
+    when(adminRepository.findByUsername("admin")).thenReturn(Optional.of(existingAdmin));
+    when(adminRepository.findByUsername("inactive_admin")).thenReturn(Optional.of(existingInactiveAdmin));
+    
+    adminService.initializeDefaultAdmin();
+
+    verify(adminRepository, never()).save(any(Admin.class));
+}
 
     @Test
     void initializeDefaultAdmin_WhenException_ShouldHandle() {

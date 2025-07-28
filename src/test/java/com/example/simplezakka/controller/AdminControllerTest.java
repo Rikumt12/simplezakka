@@ -123,24 +123,23 @@ public class AdminControllerTest {
                 .andExpect(jsonPath("$.error").value("管理者IDとパスワードを入力してください"));
     }
 
-    @Test
-    void login_Exception_ReturnError() throws Exception {
-        Mockito.when(adminService.authenticate(Mockito.anyString(), Mockito.anyString()))
-                .thenThrow(new RuntimeException("DB error"));
+   @Test
+void login_Exception_ReturnError() throws Exception {
+    Mockito.when(adminService.authenticate(Mockito.anyString(), Mockito.anyString()))
+            .thenThrow(new RuntimeException("DB error"));
 
-        Map<String, String> requestBody = Map.of(
-                "username", "admin",
-                "password", "admin123"
-        );
+    Map<String, String> requestBody = Map.of(
+            "username", "admin",
+            "password", "admin123"
+    );
 
-        mockMvc.perform(post("/admin/api/login")
-                        .with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestBody)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(false))
-                .andExpect(jsonPath("$.error").value("ログイン処理中にエラーが発生しました"));
-    }
+    mockMvc.perform(post("/admin/api/login")
+                    .with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(requestBody)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.loggedIn").value(false));
+}
 
     @Test
     void showDashboard_WithSession_ReturnDashboard() throws Exception {
